@@ -5,7 +5,6 @@ const context = canvas.getContext("2d");
 const contextText = canvas.getContext("2d");
 const CANVAS_WIDTH = 1920;
 const CANVAS_HEIGHT = 1080;
-context.imageSmoothingEnabled =false;
 
 
 //fishing vars
@@ -13,7 +12,7 @@ context.imageSmoothingEnabled =false;
 let hookX = 200;
 let hookY = 250;
 
-let casted = true;
+let casted = false;
 
 let reelSpeed = 2;
 
@@ -21,6 +20,19 @@ let cooldown = 150;
 
 let victory = false;
 let canInteract = false;
+
+//fish vars
+//======================================
+
+let fishSpawnTime = 300;
+let fishLure = 15;
+let fishSpawned = false;
+let fishRarityChance = 1;
+
+let fish = {Bass,Trout,Pike,Walleye,Carp};
+
+
+
 
 // image setup
 //=======================================================
@@ -118,21 +130,15 @@ function draw() {
     if (fishing == true)
     {
         context.drawImage(background,0,0,canvas.width,canvas.height);
+        if (casted)
+        {
+            context.fillStyle = "#000";
+            
+            context.fillRect(hookX,hookY,15,15);
+        }
     }
 
 }
-
-
-
-function backgroundDrawer()
-{
-    if (timePeriod == enum_time.present)// present floor
-    {
-        context.drawImage(floorPresent,0,0,floorPresent.width,floorPresent.height,0,0,floorPresent.width *4,floorPresent.height*4);
-    }
-}
-const WALL_FRAME_WIDTH = 26;
-const WALL_FRAME_HEIGHT = 67;
 
 
 let musicActive = false;
@@ -153,10 +159,17 @@ function changeVolume()
 
 }
 
+
+
+function spawnFish()
+{
+
+}
+
 function update() {
     
 
-    if (pause == true )
+    if (pause)
     {
 
     }
@@ -164,9 +177,12 @@ function update() {
     {
         
     }
-    else
+    else if (fishing)
     {
-
+        if (casted)
+        {
+            spawnFish();
+        }
     }
 }
 

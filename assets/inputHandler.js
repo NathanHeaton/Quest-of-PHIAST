@@ -17,15 +17,42 @@ let mousePos = {
 window.addEventListener("touchstart", touchInput);
 
 
-canvas.addEventListener("click", mouseInput)
+canvas.addEventListener("mousedown", mouseInput);
+canvas.addEventListener("wheel", mouseScroll);
+canvas.addEventListener("mouseup",mouseLetGo);
 
 let isDragging = false;
 
+let mouseUp = false;
+
+function mouseScroll(event)
+{
+    if(fishing && casted)
+    {
+        console.log(event.deltaY);
+        if(event.deltaY == 60)
+        {
+            
+        }
+    }
+}
+
+function mouseLetGo()
+{
+    if(fishing)
+    {
+        console.log("mouse up");
+        mouseUp = true;
+        casted = false;
+    }
+}
 function mouseInput(event)
 {
     // Get the mouse coordinates relative to the canvas
     var mouseX = event.clientX - canvas.getBoundingClientRect().left;
     var mouseY = event.clientY - canvas.getBoundingClientRect().top;
+
+    mouseUp = false;
 
     if(pause)// when in the pause screen
     {
@@ -71,6 +98,19 @@ function mouseInput(event)
             isDragging = true;
             handleMouseMoveSFX(event);
             changeVolume();
+        }
+
+
+    }
+
+    if(fishing)
+    {
+        if (mouseY > 600)
+        {
+            console.log("vaild fishing location");
+            hookX = mouseX;
+            hookY = mouseY;
+            casted = true;
         }
 
 
