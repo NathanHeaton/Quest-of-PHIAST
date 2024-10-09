@@ -32,7 +32,7 @@ function mouseScroll(event)
         console.log(event.deltaY);
         if(event.deltaY == 60)
         {
-            
+
         }
     }
 }
@@ -44,6 +44,8 @@ function mouseLetGo()
         console.log("mouse up");
         mouseUp = true;
         casted = false;
+        fishSpawnTime = 3000;
+        fishSpawned = false
     }
 }
 function mouseInput(event)
@@ -53,6 +55,8 @@ function mouseInput(event)
     var mouseY = event.clientY - canvas.getBoundingClientRect().top;
 
     mouseUp = false;
+
+    let ratioY = canvas.clientHeight / 1080;
 
     if(pause)// when in the pause screen
     {
@@ -105,7 +109,7 @@ function mouseInput(event)
 
     if(fishing)
     {
-        if (mouseY > 600)
+        if (mouseY > 600*ratioY)
         {
             console.log("vaild fishing location");
             hookX = mouseX;

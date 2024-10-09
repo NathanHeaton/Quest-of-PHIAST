@@ -24,12 +24,12 @@ let canInteract = false;
 //fish vars
 //======================================
 
-let fishSpawnTime = 300;
+let fishSpawnTime = 3000;
 let fishLure = 15;
 let fishSpawned = false;
 let fishRarityChance = 1;
 
-let fish = {Bass,Trout,Pike,Walleye,Carp};
+let fish = ["Bass","Trout","Pike","Walleye","Carp"];
 
 
 
@@ -133,7 +133,10 @@ function draw() {
         if (casted)
         {
             context.fillStyle = "#000";
-            
+            if(fishSpawned)
+            {
+                context.fillStyle = "#FFF";
+            }
             context.fillRect(hookX,hookY,15,15);
         }
     }
@@ -163,7 +166,14 @@ function changeVolume()
 
 function spawnFish()
 {
-
+    if(fishSpawnTime <= 0)
+    {
+        fishSpawned = true;
+    }
+    else
+    {
+        fishSpawnTime -= fishLure;
+    }
 }
 
 function update() {
