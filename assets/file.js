@@ -19,6 +19,8 @@ let amountReeled = 0;
 
 let cooldown = 150;
 
+let fishCaught = false;
+
 let victory = false;
 let canInteract = false;
 
@@ -148,6 +150,12 @@ function draw() {
             {
                 context.fillStyle = "#FFF";
             }
+            if(fishCaught)
+            {
+                contextText.fillStyle = "white";
+                contextText.font = "80px Arial";
+                contextText.fillText("caught: " + randomFish, 450, 150);
+            }
             context.fillRect(hookX,hookY,15,15);
         }
     }
@@ -186,6 +194,7 @@ function spawnFish()
 {
     if(fishSpawnTime <= 0 && !fishSpawned)
     {
+        fishCaught = false;// gets rid of the previous fish message
         fishSpawned = true;
         // get a random fish and picks the reel time need for that fish
         let rngNumber =  Math.floor(Math.random() * (fish.length - 0 )) + 0;
@@ -204,9 +213,8 @@ function catchFish()
 {
     if (amountReeled >= fishReelTime)
     {
-        fishSpawned = false;
+        fishCaught = true;
         fishInventory.push(randomFish);
-        console.log("you caught a " + randomFish + "\n player inventry" + fishInventory);
         resetCast();
         amountReeled = 0;
     }

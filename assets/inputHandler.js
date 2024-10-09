@@ -33,7 +33,6 @@ function mouseScroll(event)
         if(event.deltaY > 1)
         {
             amountReeled += reelSpeed;
-            console.log(amountReeled);
         }
     }
 }
