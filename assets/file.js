@@ -15,6 +15,7 @@ let hookY = 250;
 let casted = false;
 
 let reelSpeed = 2;
+let amountReeled = 0;
 
 let cooldown = 150;
 
@@ -30,6 +31,16 @@ let fishSpawned = false;
 let fishRarityChance = 1;
 
 let fish = ["Bass","Trout","Pike","Walleye","Carp"];
+let randomFish;
+let reelTime = [20,10,8,15,30];
+let fishReelTime;
+
+
+//player vars
+//======================================
+
+let fishInventory = [];
+
 
 
 
@@ -162,17 +173,42 @@ function changeVolume()
 
 }
 
+function resetCast()
+{
+    casted = false;
+    fishSpawnTime = 3000;
+    fishSpawned = false
+}
+
 
 
 function spawnFish()
 {
-    if(fishSpawnTime <= 0)
+    if(fishSpawnTime <= 0 && !fishSpawned)
     {
         fishSpawned = true;
+        // get a random fish and picks the reel time need for that fish
+        let rngNumber =  Math.floor(Math.random() * (fish.length - 0 )) + 0;
+        randomFish = fish[rngNumber];
+        fishReelTime = reelTime[rngNumber];
+
+
     }
     else
     {
         fishSpawnTime -= fishLure;
+    }
+}
+
+function catchFish()
+{
+    if (amountReeled >= fishReelTime)
+    {
+        fishSpawned = false;
+        fishInventory.push(randomFish);
+        console.log("you caught a " + randomFish + "\n player inventry" + fishInventory);
+        resetCast();
+        amountReeled = 0;
     }
 }
 
@@ -192,6 +228,7 @@ function update() {
         if (casted)
         {
             spawnFish();
+            catchFish();
         }
     }
 }

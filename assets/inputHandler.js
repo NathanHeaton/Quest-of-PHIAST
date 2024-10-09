@@ -30,9 +30,10 @@ function mouseScroll(event)
     if(fishing && casted)
     {
         console.log(event.deltaY);
-        if(event.deltaY == 60)
+        if(event.deltaY > 1)
         {
-
+            amountReeled += reelSpeed;
+            console.log(amountReeled);
         }
     }
 }
@@ -41,11 +42,8 @@ function mouseLetGo()
 {
     if(fishing)
     {
-        console.log("mouse up");
         mouseUp = true;
-        casted = false;
-        fishSpawnTime = 3000;
-        fishSpawned = false
+        resetCast();
     }
 }
 function mouseInput(event)
@@ -106,18 +104,15 @@ function mouseInput(event)
 
 
     }
-
+    // while the player is in the fishing screen
     if(fishing)
     {
         if (mouseY > 600*ratioY)
         {
-            console.log("vaild fishing location");
             hookX = mouseX;
             hookY = mouseY;
             casted = true;
         }
-
-
     }
 }
 
