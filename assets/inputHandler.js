@@ -27,7 +27,7 @@ let mouseUp = false;
 
 function mouseScroll(event)
 {
-    if(fishing && casted)
+    if(fishing && casted && fishSpawned)
     {
 
         console.log(event.deltaY);
@@ -50,6 +50,7 @@ function mouseScroll(event)
         if (LineSnapAmount > 255)
         {
             console.log("line snapped");
+            lineSnapped = true;
             resetCast();
         }
     }
@@ -130,6 +131,7 @@ function mouseInput(event)
             hook.x = mouseX;
             hook.y = mouseY;
             casted = true;
+            lineSnapped = false;
         }
 
         if (mouseX >= ratioX*1500 && mouseX <= ratioX*1900 && mouseY >= 20*ratioY && mouseY <= 140*ratioY) 

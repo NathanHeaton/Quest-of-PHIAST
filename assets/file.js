@@ -14,6 +14,8 @@ let hook = {x : 200, y : 250};
 
 let lineStrength = 20;
 let LineSnapAmount = 0;
+let lineSnapped = false;
+let LineSnapMessage = "your line snapped don't let the hook go white"
 
 let casted = false;
 
@@ -168,7 +170,13 @@ function draw() {
         {
             contextText.fillStyle = "white";
             contextText.font = "50px Arial";
-            contextText.fillText("caught: " + randomFish, 150, 150);
+            contextText.fillText("caught: " + randomFish, 50, 150);
+        }
+        if (lineSnapped)
+        {
+            contextText.fillStyle = "white";
+            contextText.font = "50px Arial";
+            contextText.fillText(LineSnapMessage, 50, 150);
         }
     }
     if (feeding == true)
