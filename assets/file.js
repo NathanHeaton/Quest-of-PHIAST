@@ -45,7 +45,18 @@ let fishReelTime;
 
 //player vars
 //======================================
-let fishInventory = [];
+
+let playerInventory = {
+    fish:[],
+    gear:[],
+    misc:[],
+    bait:[]
+}
+
+playerInventory.fish.push();
+playerInventory.gear.push({ type:'rod', name: 'Stick Fishing Rod', speed: 2 },{type:'line', name:'yarn Line', strength:20});
+playerInventory.misc.push({ name: 'Water Bottle', quantity: 1 });
+playerInventory.bait.push({ name: 'Worm', quantity: 20, lure:15 });
 
 
 //An Phaist vars
@@ -273,13 +284,14 @@ function catchFish()
 }
 
 // line slowly weakens and reel amount resets
-function passiveLineLoss()
+function passiveLineGain()
 {
     if ( amountReeled > 0)
     {
         amountReeled -= reelSpeed / 30;
+
     }
-    LineSnapAmount += lineStrength / 60;
+    LineSnapAmount -= playerInventory.gear.forEach / 30;
 }
 
 function update() {
@@ -302,7 +314,7 @@ function update() {
 
             if(fishSpawned)
             {
-                passiveLineLoss();
+                passiveLineGain();
             }
         }
     }
