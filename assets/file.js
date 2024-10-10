@@ -9,8 +9,11 @@ const CANVAS_HEIGHT = 1080;
 
 //fishing vars
 //======================================
-let hookX = 200;
-let hookY = 250;
+
+let hook = {x : 200, y : 250};
+
+let lineStrength = 20;
+let LineSnapAmount = 0;
 
 let casted = false;
 
@@ -34,23 +37,19 @@ let fishRarityChance = 1;
 
 let fish = ["Bass","Trout","Pike","Walleye","Carp"];
 let randomFish;
-let reelTime = [20,10,8,15,30];
+let reelTime = [40,30,80,35,45];
 let fishReelTime;
 
 
 //player vars
 //======================================
-
 let fishInventory = [];
 
 
 //An Phaist vars
 //======================================
-
 let APhaistResponse = "you have no fish I might need to eat YOU!!!!";
-
 let responding = false;
-
 
 // image setup
 //=======================================================
@@ -157,10 +156,13 @@ function draw() {
             context.fillStyle = "#000";
             if(fishSpawned)
             {
-                context.fillStyle = "#FFF";
+                context.fillStyle = "#000";
+                context.fillRect(0,0,amountReeled,40);
+
+                context.fillStyle = "rgb(255,"+ LineSnapAmount +"," + LineSnapAmount +")";
             }
 
-            context.fillRect(hookX,hookY,15,15);
+            context.fillRect(hook.x,hook.y,15,15);
         }
         if(fishCaught)
         {
@@ -169,9 +171,6 @@ function draw() {
             contextText.fillText("caught: " + randomFish, 150, 150);
         }
     }
-
-    
-
     if (feeding == true)
     {
         context.drawImage(feedingBackground,0,0,canvas.width,canvas.height);
@@ -183,31 +182,13 @@ function draw() {
         }
 
     }
-        
-
 }
 
-
-let musicActive = false;
-function playBackgroundMusic()
-{
-    
-    if (musicActive == false)
-    {
-        music.play();
-        musicActive = true;
-    }
-    
-}
-
-function changeVolume()
-{
-
-
-}
 
 function resetCast()
 {
+    LineSnapAmount = 0;
+    amountReeled = 0;
     casted = false;
     fishSpawnTime = 3000;
     fishSpawned = false
@@ -234,6 +215,7 @@ function spawnFish()
     }
 }
 
+// for feeding An Phaist
 function feed()
 {
     responding = true;
@@ -248,6 +230,29 @@ function feed()
     }
 }
 
+const BOAT_POS = {x : 810 ,y : 1080};
+
+// adds some animation
+function animatedLineIn(dir)
+{
+    let xincrement =0;
+    let yincrement = 0;
+
+    xincrement = (BOAT_POS.x - hook.x) / fishReelTime;
+    yincrement = (BOAT_POS.y - hook.y) / fishReelTime;
+
+
+    hook.x += xincrement * dir;
+    hook.y += yincrement * dir;
+    if (hook.x < 600)
+    {
+        hook.x = 600;
+    }
+
+
+}
+
+// function to add fish to inv and reset cast
 function catchFish()
 {
     if (amountReeled >= fishReelTime)
@@ -257,6 +262,16 @@ function catchFish()
         resetCast();
         amountReeled = 0;
     }
+}
+
+// line slowly weakens and reel amount resets
+function passiveLineLoss()
+{
+    if ( amountReeled > 0)
+    {
+        amountReeled -= reelSpeed / 30;
+    }
+    LineSnapAmount += lineStrength / 60;
 }
 
 function update() {
@@ -276,6 +291,11 @@ function update() {
         {
             spawnFish();
             catchFish();
+
+            if(fishSpawned)
+            {
+                passiveLineLoss();
+            }
         }
     }
 }

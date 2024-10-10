@@ -29,10 +29,28 @@ function mouseScroll(event)
 {
     if(fishing && casted)
     {
+
         console.log(event.deltaY);
         if(event.deltaY > 1)
         {
             amountReeled += reelSpeed;
+            LineSnapAmount += lineStrength / 2;
+            animatedLineIn(1);//pulling in
+
+        }
+        else // line slowly goes back
+        {
+            amountReeled -= reelSpeed / 2;
+            LineSnapAmount -= lineStrength * 2;
+            console.log("line :"+ LineSnapAmount);
+            animatedLineIn(-1);// letting out
+        }
+
+        // resets progress if line snaps
+        if (LineSnapAmount > 255)
+        {
+            console.log("line snapped");
+            resetCast();
         }
     }
 }
@@ -109,8 +127,8 @@ function mouseInput(event)
     {
         if (mouseY > 600*ratioY)
         {
-            hookX = mouseX;
-            hookY = mouseY;
+            hook.x = mouseX;
+            hook.y = mouseY;
             casted = true;
         }
 
