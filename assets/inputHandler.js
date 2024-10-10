@@ -54,6 +54,7 @@ function mouseInput(event)
     mouseUp = false;
 
     let ratioY = canvas.clientHeight / 1080;
+    let ratioX = canvas.clientWidth / 1920;
 
     if(pause)// when in the pause screen
     {
@@ -112,7 +113,27 @@ function mouseInput(event)
             hookY = mouseY;
             casted = true;
         }
+
+        if (mouseX >= ratioX*1500 && mouseX <= ratioX*1900 && mouseY >= 20*ratioY && mouseY <= 140*ratioY) 
+        {
+            feeding = true;
+            fishing = false;
+        }
     }
+    if(feeding)
+        {
+            if (mouseX >= ratioX*400 && mouseX <= ratioX*750 && mouseY >= 850*ratioY && mouseY <= 1080*ratioY) 
+            {
+                feeding = false;
+                fishing = true;
+                responding = false;
+            }
+            else if (mouseX >= ratioX*10 && mouseX <= ratioX*360 && mouseY >= 850*ratioY && mouseY <= 1080*ratioY) 
+            {
+                feed();//feeds an phiast
+                console.log("feeding")
+            }
+        }
 }
 
 function pauseToggle()
@@ -167,43 +188,8 @@ function touchInput(event)
 let sprintState = 0; // bool for sprinting
 function input(event) {
     // Take Input from the Player
-    // console.log("Input");
-    console.log(event);
-    console.log("Event type: " + event.type);
-    // console.log("Keycode: " + event.key);
 if (event.type === "keydown") {
     switch (event.key) {
-        case "a": // Left Arrow
-            gamerInput = new GamerInput("Left");
-            blueButton.classList.add("pressed");
-            break; //Left key
-        case "w": // Up Arrow
-            gamerInput = new GamerInput("Up");
-            yellowButton.classList.add("pressed");
-            break; //Up key
-        case "d": // Right Arrow
-            gamerInput = new GamerInput("Right");
-            redButton.classList.add("pressed");
-            break; //Right key
-        case "s": // Down Arrow
-            gamerInput = new GamerInput("Down");
-            greenButton.classList.add("pressed");
-            break; //h key
-        case "h":// sprint
-            if (!cooldownState) // if there is no cooldown on
-            {
-            sprintState = true;
-            }
-            sprintButton.classList.add("pressed");
-            break; //Down key
-        case "e": // e key;
-            interactButton.classList.add("pressed");
-            if (canInteract == true)
-            {
-                switchState = !switchState ;// means it is toogled
-                console.log("toggled");
-            }
-            break;
         case "Escape":
             pause = !pause;// toggles pause
             console.log(pause);

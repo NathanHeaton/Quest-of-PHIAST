@@ -44,13 +44,21 @@ let fishReelTime;
 let fishInventory = [];
 
 
+//An Phaist vars
+//======================================
 
+let APhaistResponse = "you have no fish I might need to eat YOU!!!!";
+
+let responding = false;
 
 
 // image setup
 //=======================================================
 let background = new Image();
 background.src = "assets/img/Background + UI elements.png";
+
+let feedingBackground = new Image();
+feedingBackground.src = "assets/img/Dingle storyboard feeding.png";
 
 
 // audio setup
@@ -78,7 +86,8 @@ function GameObject(spritesheet, x, y, width, height) {
 //=======================================================
 let pause = false;
 let fishing = true;
-let option = false
+let option = false;
+let feeding = false;
 
 // window
 //============================================================
@@ -150,15 +159,31 @@ function draw() {
             {
                 context.fillStyle = "#FFF";
             }
-            if(fishCaught)
-            {
-                contextText.fillStyle = "white";
-                contextText.font = "80px Arial";
-                contextText.fillText("caught: " + randomFish, 450, 150);
-            }
+
             context.fillRect(hookX,hookY,15,15);
         }
+        if(fishCaught)
+        {
+            contextText.fillStyle = "white";
+            contextText.font = "50px Arial";
+            contextText.fillText("caught: " + randomFish, 150, 150);
+        }
     }
+
+    
+
+    if (feeding == true)
+    {
+        context.drawImage(feedingBackground,0,0,canvas.width,canvas.height);
+        if(responding)
+        {
+            contextText.fillStyle = "white";
+            contextText.font = "50px Arial";
+            contextText.fillText("An Phaist: "+ APhaistResponse, 150, 60);
+        }
+
+    }
+        
 
 }
 
@@ -206,6 +231,20 @@ function spawnFish()
     else
     {
         fishSpawnTime -= fishLure;
+    }
+}
+
+function feed()
+{
+    responding = true;
+    if (fishInventory.length == 0)
+    {
+        APhaistResponse = "you have no fish I might need to eat YOU!!!!";
+    }
+    else
+    {
+        APhaistResponse = "That's a tasty " + fishInventory[fishInventory.length - 1];
+        fishInventory.pop();
     }
 }
 
