@@ -65,14 +65,44 @@ let playerInventory = {
 }
 
 
-playerInventory.gear.push({ type:'rod', name: 'Stick Fishing Rod', speed: 2 },{type:'line', name:'yarn Line', strength:20});
+playerInventory.gear.push({ type:'rod', name: 'Stick Fishing Rod', description:'normal stick with a wire stuck to it', speed: 2 },{type:'line', name:'yarn Line', description:'very weak line', strength:20});
 playerInventory.bait.push({ type: 'bait', name: 'Worm', quantity: 20, lure:15, spawnTime: 3000, status: "active" });
 
-
+ 
 //An Phaist vars
 //======================================
 let APhaistResponse = "you have no fish I might need to eat YOU!!!!";
 let responding = false;
+
+// rewards that you can get from giveing fish
+let Rewards = {
+    gear:[
+        // rods
+        { type:'rod', name: 'Childrens fishing rod', description:'Just about better than a stick', speed: 3 },
+        { type:'rod', name: 'Trolling rod', description:'Perfect for fishing on a boat', speed: 5 },
+        { type:'rod', name: 'Composite trolling rod', description:'Strong and light weight', speed: 6, spawnBonus:0.2 },
+        { type:'rod', name: 'Graphite trolling rod', description:'The ultimate rod', speed: 8, spawnBonus:0.4 },
+
+        // line
+        { type:'line', name:'Old fishing line', description:'better than yarn atleast', strength:30 },
+        { type:'line', name:'Monofilament Line', description:'cheap basic fishing line', strength:35 },
+        { type:'line', name:'Braid Fishing Line', description:'Offers twice the strenght of monofilament', strength:60 },
+        { type:'line', name:'Fluorocarbon Fishing Line', description:'Perfect complement to braid', strength:65, lureBonus: 0.2 },
+        { type:'line', name:'Spiderwire Braid', description:'The ultimate fishing line', strength:75, lureBonus:0.4 }
+    ],
+    bait:[
+        { type: 'bait', name: 'Worm', quantity: 20, lure:15, spawnTime: 3000, status: "inActive" },
+        { type: 'bait', name: 'Shrimp', quantity: 20, lure:20, spawnTime: 3000, status: "inActive" },
+        { type: 'bait', name: 'Fish Food', quantity: 5, lure:25, spawnTime: 2500, status: "inActive" },
+        { type: 'bait', name: 'Cheese', quantity: 10, lure:25, spawnTime: 2250, status: "inActive" },
+        { type: 'bait', name: 'Basic Lure', quantity: 100, lure:20, spawnTime: 2500, status: "inActive" },
+        { type: 'bait', name: 'Minnow', quantity: 7, lure:30, spawnTime: 500, status: "inActive" },
+        { type: 'bait', name: 'Special Lure', quantity: 100, lure:30, spawnTime: 1500, status: "inActive" },
+        { type: 'bait', name: 'Golden Fish Food', quantity: 3, lure:35, spawnTime: 4000, status: "inActive" },
+        { type: 'bait', name: 'Golden Special Lure', quantity: 100, lure:35, spawnTime: 1500, status: "inActive" },
+        { type: 'bait', name: 'True Bait', quantity: 5, lure:40, spawnTime: 1500, status: "inActive" }
+    ]
+}
 
 let gameOverMessage = "you ran out of bait";
 
