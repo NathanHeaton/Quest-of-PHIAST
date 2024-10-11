@@ -32,17 +32,15 @@ let canInteract = false;
 //fish vars
 //======================================
 
-let fishSpawnTime = 3000;
-let fishLure = 15;
+let fishSpawnTime = 100;
 let fishSpawned = false;
-let fishRarityChance = 1;
 
-let fish = [
-    { type:"fish", name:"Bass", rarity:"common", reelTime: 40 },
-    { type:"fish", name:"Trout", rarity:"common", reelTime: 30 },
-    { type:"fish", name:"Pike", rarity:"common", reelTime: 55 },
-    { type:"fish", name:"Walleye", rarity:"common", reelTime: 35 },
-    { type:"fish", name:"Carp", rarity:"common", reelTime: 45 },
+let loot = [
+    { type:"fish", name:"Bass", rarity:"Common", reelTime: 40 },
+    { type:"fish", name:"Trout", rarity:"Common", reelTime: 30 },
+    { type:"fish", name:"Pike", rarity:"Common", reelTime: 55 },
+    { type:"fish", name:"Walleye", rarity:"Common", reelTime: 35 },
+    { type:"fish", name:"Carp", rarity:"Common", reelTime: 45 },
     { type:"fish", name:"Sauger", rarity:"Rare", reelTime:70 },
     { type:"fish", name:"Blue Catfish", rarity:"Rare", reelTime: 80 },
     { type:"fish", name:"Black Crappie", rarity:"Rare", reelTime: 75 },
@@ -50,6 +48,12 @@ let fish = [
     { type:"fish", name:"Sunfish Bluegill", rarity:"Epic", reelTime: 110 },
     { type:"fish", name:"Rainbow Trout", rarity:"Epic", reelTime: 120 },
     { type:"fish", name:"Salmon of Knowledge", rarity:"Legendary", reelTime: 150 },
+    //junk items
+    { type:"junk", name:"Swimming Goggles", rarity:"Rare", reelTime: 25 },
+    { type:"junk", name:"Tin Can", rarity:"Common", reelTime:15 },
+    { type:"junk", name:"Broken Net", rarity:"Common", reelTime: 60 },
+    { type:"junk", name:"Ancient Sword", rarity:"Epic", reelTime: 105 },
+    { type:"junk", name:"Gold Ring", rarity:"Legendary", reelTime: 140 },
     ];
 let randomFish;
 let fishReelTime;
@@ -59,15 +63,13 @@ let fishReelTime;
 //======================================
 
 let playerInventory = {
-    fish:[],
+    loot:[],
     gear:[],
-    misc:[],
     bait:[]
 }
 
 playerInventory.gear.push({ type:'rod', name: 'Stick Fishing Rod', speed: 2 },{type:'line', name:'yarn Line', strength:20});
-playerInventory.misc.push({ type: 'junk', name: 'Water Bottle', quantity: 1 });
-playerInventory.bait.push({ type: 'bait', name: 'Worm', quantity: 20, lure:15, spawnTime: 3000 });
+playerInventory.bait.push({ type: 'bait', name: 'Worm', quantity: 20, lure:40, spawnTime: 3000 });
 
 
 //An Phaist vars
@@ -192,7 +194,7 @@ function draw() {
         {
             contextText.fillStyle = "white";
             contextText.font = "50px Arial";
-            contextText.fillText("caught: " + randomFish, 50, 150);
+            contextText.fillText("You caught ("+randomFish.rarity+ " " + randomFish.name + ")", 50, 150);
         }
         if (lineSnapped)
         {
@@ -220,8 +222,54 @@ function resetCast()
     LineSnapAmount = 0;
     amountReeled = 0;
     casted = false;
-    fishSpawnTime = 3000;
+    fishSpawnTime = playerInventory.bait.find(item => item.type == "bait").spawnTime;
     fishSpawned = false
+}
+
+function pickFishRarity()
+{
+    let playerBait = playerInventory.bait.find(item => item.type == "bait");
+    let lootPool = [];
+
+    console.log(playerBait);
+    // based on the player lure makes the loot pool
+    if (playerBait.lure <= 15)
+    {
+        lootPool = loot.filter(item => item.rarity == "Common");
+    }
+    else if (playerBait.lure <= 20)
+    {
+        lootPool = loot.filter(item => item.rarity == "Common" || item.rarity == "Rare");
+    }
+    else if (playerBait.lure <= 25)
+    {
+        lootPool = loot.filter(item => item.rarity == "Common" || item.rarity == "Rare" || item.rarity == "Epic");
+    }
+    else if (playerBait.lure <= 30)
+    {
+        lootPool = loot.filter(item => item.rarity == "Rare" || item.rarity == "Epic");
+    }
+    else if (playerBait.lure <= 35)
+    {
+        lootPool = loot.filter(item => item.rarity == "Rare" || item.rarity == "Epic" || item.rarity == "Legendary");
+    }
+    else if (playerBait.lure <= 40)
+    {
+        lootPool = loot.filter(item => item.rarity == "Epic" || item.rarity == "Legendary");
+    }
+    
+
+
+    // make sure there is items in the loot pool
+    if (lootPool.length > 0) {
+        rngNumber = Math.floor(Math.random() * lootPool.length);
+    } else {
+        console.log("No items in the loot pool!");
+        return null;
+    }
+    console.log(lootPool);
+
+    return lootPool[rngNumber];
 }
 
 
@@ -233,11 +281,8 @@ function spawnFish()
         fishCaught = false;// gets rid of the previous fish message
         fishSpawned = true;
         // get a random fish and picks the reel time need for that fish
-        let rngNumber =  Math.floor(Math.random() * (fish.length - 0 )) + 0;
-        randomFish = fish[rngNumber];
-        fishReelTime = reelTime[rngNumber];
-
-
+        randomFish = pickFishRarity();
+        fishReelTime = randomFish.reelTime;
     }
     else
     {
@@ -249,7 +294,7 @@ function spawnFish()
 function feed()
 {
     responding = true;
-    let totalFish = playerInventory.fish.length;
+    let totalFish = playerInventory.loot.length;
 
     if (totalFish == 0)
     {
@@ -257,8 +302,8 @@ function feed()
     }
     else
     {
-        APhaistResponse = "That's a tasty " + playerInventory.fish[totalFish - 1];
-        playerInventory.fish.pop();
+        APhaistResponse = "That's a tasty " + playerInventory.loot[playerInventory.loot.length - 1].name;
+        playerInventory.loot.pop();
     }
 }
 
@@ -290,7 +335,7 @@ function catchFish()
     if (amountReeled >= fishReelTime)
     {
         fishCaught = true;
-        playerInventory.fish.push({type: "fish", name: randomFish, value: );
+        playerInventory.loot.push(randomFish);
         resetCast();
         amountReeled = 0;
     }
