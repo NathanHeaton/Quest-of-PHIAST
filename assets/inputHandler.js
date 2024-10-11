@@ -27,21 +27,22 @@ let mouseUp = false;
 
 function mouseScroll(event)
 {
-    if(fishing && casted && fishSpawned)
+    if(casted && fishSpawned)
     {
-
+        let rod = playerInventory.gear.find(item => item.type === "rod");// gets the players rod from their inventory
+        let line = playerInventory.gear.find(item => item.type === "line");
         console.log(event.deltaY);
         if(event.deltaY > 1)
         {
-            amountReeled += reelSpeed;
-            LineSnapAmount += lineStrength / 2;
+            amountReeled += rod.speed;//gets the speed of the reel
+            LineSnapAmount += line.strength / 2;
             animatedLineIn(1);//pulling in
 
         }
         else // line slowly goes back
         {
-            amountReeled -= reelSpeed / 2;
-            LineSnapAmount -= lineStrength * 2;
+            amountReeled -= rod.speed / 2;
+            LineSnapAmount -= line.strength * 2;
             console.log("line :"+ LineSnapAmount);
             animatedLineIn(-1);// letting out
         }

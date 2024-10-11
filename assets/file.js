@@ -37,9 +37,21 @@ let fishLure = 15;
 let fishSpawned = false;
 let fishRarityChance = 1;
 
-let fish = ["Bass","Trout","Pike","Walleye","Carp"];
+let fish = [
+    { type:"fish", name:"Bass", rarity:"common", reelTime: 40 },
+    { type:"fish", name:"Trout", rarity:"common", reelTime: 30 },
+    { type:"fish", name:"Pike", rarity:"common", reelTime: 55 },
+    { type:"fish", name:"Walleye", rarity:"common", reelTime: 35 },
+    { type:"fish", name:"Carp", rarity:"common", reelTime: 45 },
+    { type:"fish", name:"Sauger", rarity:"Rare", reelTime:70 },
+    { type:"fish", name:"Blue Catfish", rarity:"Rare", reelTime: 80 },
+    { type:"fish", name:"Black Crappie", rarity:"Rare", reelTime: 75 },
+    { type:"fish", name:"White Crappie", rarity:"Epic", reelTime:90 },
+    { type:"fish", name:"Sunfish Bluegill", rarity:"Epic", reelTime: 110 },
+    { type:"fish", name:"Rainbow Trout", rarity:"Epic", reelTime: 120 },
+    { type:"fish", name:"Salmon of Knowledge", rarity:"Legendary", reelTime: 150 },
+    ];
 let randomFish;
-let reelTime = [40,30,80,35,45];
 let fishReelTime;
 
 
@@ -53,10 +65,9 @@ let playerInventory = {
     bait:[]
 }
 
-playerInventory.fish.push();
 playerInventory.gear.push({ type:'rod', name: 'Stick Fishing Rod', speed: 2 },{type:'line', name:'yarn Line', strength:20});
-playerInventory.misc.push({ name: 'Water Bottle', quantity: 1 });
-playerInventory.bait.push({ name: 'Worm', quantity: 20, lure:15 });
+playerInventory.misc.push({ type: 'junk', name: 'Water Bottle', quantity: 1 });
+playerInventory.bait.push({ type: 'bait', name: 'Worm', quantity: 20, lure:15, spawnTime: 3000 });
 
 
 //An Phaist vars
@@ -230,7 +241,7 @@ function spawnFish()
     }
     else
     {
-        fishSpawnTime -= fishLure;
+        fishSpawnTime -= playerInventory.bait.find(item => item.type === "bait").lure;// gets the lure of the bait
     }
 }
 
@@ -238,14 +249,16 @@ function spawnFish()
 function feed()
 {
     responding = true;
-    if (fishInventory.length == 0)
+    let totalFish = playerInventory.fish.length;
+
+    if (totalFish == 0)
     {
         APhaistResponse = "you have no fish I might need to eat YOU!!!!";
     }
     else
     {
-        APhaistResponse = "That's a tasty " + fishInventory[fishInventory.length - 1];
-        fishInventory.pop();
+        APhaistResponse = "That's a tasty " + playerInventory.fish[totalFish - 1];
+        playerInventory.fish.pop();
     }
 }
 
@@ -277,7 +290,7 @@ function catchFish()
     if (amountReeled >= fishReelTime)
     {
         fishCaught = true;
-        fishInventory.push(randomFish);
+        playerInventory.fish.push({type: "fish", name: randomFish, value: );
         resetCast();
         amountReeled = 0;
     }
@@ -288,10 +301,10 @@ function passiveLineGain()
 {
     if ( amountReeled > 0)
     {
-        amountReeled -= reelSpeed / 30;
+        amountReeled -= playerInventory.gear.find(item => item.type === "rod").speed / 30;
 
     }
-    LineSnapAmount -= playerInventory.gear.forEach / 30;
+    LineSnapAmount -= playerInventory.gear.find(item => item.type === "line").strength / 30;
 }
 
 function update() {
