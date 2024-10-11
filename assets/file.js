@@ -22,12 +22,8 @@ let casted = false;
 let reelSpeed = 2;
 let amountReeled = 0;
 
-let cooldown = 150;
 
 let fishCaught = false;
-
-let victory = false;
-let canInteract = false;
 
 //fish vars
 //======================================
@@ -68,8 +64,9 @@ let playerInventory = {
     bait:[]
 }
 
+
 playerInventory.gear.push({ type:'rod', name: 'Stick Fishing Rod', speed: 2 },{type:'line', name:'yarn Line', strength:20});
-playerInventory.bait.push({ type: 'bait', name: 'Worm', quantity: 20, lure:40, spawnTime: 3000 });
+playerInventory.bait.push({ type: 'bait', name: 'Worm', quantity: 1, lure:40, spawnTime: 3000 });
 
 
 //An Phaist vars
@@ -113,6 +110,7 @@ let pause = false;
 let fishing = true;
 let option = false;
 let feeding = false;
+let gameOver = false;
 
 // window
 //============================================================
@@ -226,34 +224,33 @@ function resetCast()
     fishSpawned = false
 }
 
-function pickFishRarity()
+function pickFishRarity(t_bait)
 {
-    let playerBait = playerInventory.bait.find(item => item.type == "bait");
     let lootPool = [];
 
-    console.log(playerBait);
+    console.log(t_bait);
     // based on the player lure makes the loot pool
-    if (playerBait.lure <= 15)
+    if (t_bait.lure <= 15)
     {
         lootPool = loot.filter(item => item.rarity == "Common");
     }
-    else if (playerBait.lure <= 20)
+    else if (t_bait.lure <= 20)
     {
         lootPool = loot.filter(item => item.rarity == "Common" || item.rarity == "Rare");
     }
-    else if (playerBait.lure <= 25)
+    else if (t_bait.lure <= 25)
     {
         lootPool = loot.filter(item => item.rarity == "Common" || item.rarity == "Rare" || item.rarity == "Epic");
     }
-    else if (playerBait.lure <= 30)
+    else if (t_bait.lure <= 30)
     {
         lootPool = loot.filter(item => item.rarity == "Rare" || item.rarity == "Epic");
     }
-    else if (playerBait.lure <= 35)
+    else if (t_bait.lure <= 35)
     {
         lootPool = loot.filter(item => item.rarity == "Rare" || item.rarity == "Epic" || item.rarity == "Legendary");
     }
-    else if (playerBait.lure <= 40)
+    else if (t_bait.lure <= 40)
     {
         lootPool = loot.filter(item => item.rarity == "Epic" || item.rarity == "Legendary");
     }
@@ -276,17 +273,28 @@ function pickFishRarity()
 
 function spawnFish()
 {
-    if(fishSpawnTime <= 0 && !fishSpawned)
+    let playerbait = playerInventory.bait.find(item => item.type === "bait");
+    if (playerbait.quantity > 0 && !fishSpawned)
     {
-        fishCaught = false;// gets rid of the previous fish message
-        fishSpawned = true;
-        // get a random fish and picks the reel time need for that fish
-        randomFish = pickFishRarity();
-        fishReelTime = randomFish.reelTime;
+        if(fishSpawnTime <= 0 && !fishSpawned)
+        {
+            fishCaught = false;// gets rid of the previous fish message
+            fishSpawned = true;
+            // get a random fish and picks the reel time need for that fish
+            randomFish = pickFishRarity(playerbait);
+            fishReelTime = randomFish.reelTime;
+            playerbait.quantity--;//uses up bait
+            fishSpawnTime = playerInventory.bait.find(item => item.type == "bait").spawnTime;
+        }
+        else if (!fishSpawned)
+        {
+            fishSpawnTime -= playerbait.lure;// gets the lure of the bait
+        }
     }
-    else
+    else if (!fishSpawned)
     {
-        fishSpawnTime -= playerInventory.bait.find(item => item.type === "bait").lure;// gets the lure of the bait
+        resetGame();
+        console.log("you have "+ playerbait.quantity + " remaining");
     }
 }
 
@@ -394,6 +402,19 @@ let respawnActive = false;
 
 function resetGame()
 {
+    gameOver = true;
+    resetCast();
+
+    playerInventory = {
+        loot:[],
+        gear:[],
+        bait:[]
+    }
+
+    playerInventory.gear.push({ type:'rod', name: 'Stick Fishing Rod', speed: 2 },{type:'line', name:'yarn Line', strength:20});
+    playerInventory.bait.push({ type: 'bait', name: 'Worm', quantity: 1, lure:40, spawnTime: 3000 });
+
+
 
 }
 
