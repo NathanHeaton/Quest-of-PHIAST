@@ -66,13 +66,15 @@ let playerInventory = {
 
 
 playerInventory.gear.push({ type:'rod', name: 'Stick Fishing Rod', speed: 2 },{type:'line', name:'yarn Line', strength:20});
-playerInventory.bait.push({ type: 'bait', name: 'Worm', quantity: 1, lure:40, spawnTime: 3000 });
+playerInventory.bait.push({ type: 'bait', name: 'Worm', quantity: 20, lure:15, spawnTime: 3000, status: "active" });
 
 
 //An Phaist vars
 //======================================
 let APhaistResponse = "you have no fish I might need to eat YOU!!!!";
 let responding = false;
+
+let gameOverMessage = "you ran out of bait";
 
 // image setup
 //=======================================================
@@ -177,6 +179,7 @@ function draw() {
         context.drawImage(background,0,0,canvas.width,canvas.height);
         if (casted)
         {
+            
             context.fillStyle = "#000";
             if(fishSpawned)
             {
@@ -200,6 +203,9 @@ function draw() {
             contextText.font = "50px Arial";
             contextText.fillText(LineSnapMessage, 50, 150);
         }
+        contextText.fillStyle = "white";
+        contextText.font = "50px Arial";
+        contextText.fillText(getBaitQuantity(), 390, 930);
     }
     if (feeding == true)
     {
@@ -211,6 +217,20 @@ function draw() {
             contextText.fillText("An Phaist: "+ APhaistResponse, 150, 60);
         }
 
+    }
+    if (gameOver)
+    {
+        context.fillStyle = "#000";
+        context.fillRect(0, 0, canvas.width, canvas.height);
+        contextText.fillStyle = "white";
+        contextText.font = "50px Arial";
+        contextText.fillText("you ran out of bait", 150, 60);
+
+        context.fillStyle = "#FF4488";
+        context.fillRect(400, 850, 350,230);
+        contextText.fillStyle = "white";
+        contextText.font = "50px Arial";
+        contextText.fillText("New game", 500, 900);
     }
 }
 
@@ -269,7 +289,9 @@ function pickFishRarity(t_bait)
     return lootPool[rngNumber];
 }
 
-
+function getBaitQuantity(){
+    return playerInventory.bait.find(item => item.type === "bait").quantity;
+}
 
 function spawnFish()
 {
@@ -307,6 +329,7 @@ function feed()
     if (totalFish == 0)
     {
         APhaistResponse = "you have no fish I might need to eat YOU!!!!";
+        gameOverMessage = "An Phiast is hungry, and decide to eat you"
     }
     else
     {
@@ -354,10 +377,10 @@ function passiveLineGain()
 {
     if ( amountReeled > 0)
     {
-        amountReeled -= playerInventory.gear.find(item => item.type === "rod").speed / 30;
+        amountReeled -= 0.2;
 
     }
-    LineSnapAmount -= playerInventory.gear.find(item => item.type === "line").strength / 30;
+    LineSnapAmount += 0.02;
 }
 
 function update() {
@@ -403,6 +426,7 @@ let respawnActive = false;
 function resetGame()
 {
     gameOver = true;
+    fishing = false;
     resetCast();
 
     playerInventory = {

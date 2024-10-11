@@ -127,7 +127,7 @@ function mouseInput(event)
     // while the player is in the fishing screen
     if(fishing)
     {
-        if (mouseY > 600*ratioY)
+        if (mouseY > 600*ratioY && !casted)
         {
             hook.x = mouseX;
             hook.y = mouseY;
@@ -142,18 +142,27 @@ function mouseInput(event)
         }
     }
     if(feeding)
+    {
+        if (mouseX >= ratioX*400 && mouseX <= ratioX*750 && mouseY >= 850*ratioY && mouseY <= 1080*ratioY) // return
+        {
+            feeding = false;
+            fishing = true;
+            responding = false;
+        }
+        else if (mouseX >= ratioX*10 && mouseX <= ratioX*360 && mouseY >= 850*ratioY && mouseY <= 1080*ratioY) 
+        {
+            feed();//feeds an phiast
+            console.log("feeding")
+        }
+    }
+    if(gameOver)
         {
             if (mouseX >= ratioX*400 && mouseX <= ratioX*750 && mouseY >= 850*ratioY && mouseY <= 1080*ratioY) 
-            {
-                feeding = false;
-                fishing = true;
-                responding = false;
-            }
-            else if (mouseX >= ratioX*10 && mouseX <= ratioX*360 && mouseY >= 850*ratioY && mouseY <= 1080*ratioY) 
-            {
-                feed();//feeds an phiast
-                console.log("feeding")
-            }
+                {
+                    gameOver = false;
+                    fishing = true;
+                    responding = false;
+                }
         }
 }
 
@@ -206,21 +215,23 @@ function touchInput(event)
     }
 }
 
-let sprintState = 0; // bool for sprinting
 function input(event) {
     // Take Input from the Player
 if (event.type === "keydown") {
-    switch (event.key) {
-        case "Escape":
-            pause = !pause;// toggles pause
-            console.log(pause);
-            break;
-        case "1":
-            break;
-
-
-        default:
-            gamerInput = new GamerInput("None"); //No Input
-            sprintState = false;
+    if (event.key == " " &&!casted)
+    {
+        hook.x = 700;
+        hook.y = 700;
+        casted = true;
+        lineSnapped = false;
     }
-}}
+}
+if (event.type === "keyup") {
+    if (casted)
+    {
+        resetCast()
+        console.log("key up")
+    }
+}
+
+}
