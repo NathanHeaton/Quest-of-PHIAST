@@ -140,6 +140,13 @@ function mouseInput(event)
             feeding = true;
             fishing = false;
         }
+
+        if (mouseX >= ratioX*1800 && mouseX <= ratioX*1920 && mouseY >= 300*ratioY && mouseY <= 450*ratioY) 
+            {
+                fishing = false;
+                inventory = true;
+                responding = false;
+            }
     }
     if(feeding)
     {
@@ -156,14 +163,24 @@ function mouseInput(event)
         }
     }
     if(gameOver)
+    {
+        if (mouseX >= ratioX*400 && mouseX <= ratioX*750 && mouseY >= 850*ratioY && mouseY <= 1080*ratioY) 
+            {
+                gameOver = false;
+                fishing = true;
+                responding = false;
+            }
+    }
+    if(inventory)
         {
             if (mouseX >= ratioX*400 && mouseX <= ratioX*750 && mouseY >= 850*ratioY && mouseY <= 1080*ratioY) 
                 {
-                    gameOver = false;
+                    inventory = false;
                     fishing = true;
-                    responding = false;
+
                 }
         }
+
 }
 
 function pauseToggle()

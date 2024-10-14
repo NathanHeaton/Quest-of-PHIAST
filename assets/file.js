@@ -65,7 +65,8 @@ let playerInventory = {
 }
 
 
-playerInventory.gear.push({ type:'rod', name: 'Stick Fishing Rod', description:'normal stick with a wire stuck to it', speed: 2 },{type:'line', name:'yarn Line', description:'very weak line', strength:20});
+playerInventory.gear.push({ type:'rod', name: 'Stick Fishing Rod', description:'normal stick with a wire stuck to it', speed: 2, spawnBonus:0.5, status: "active" },
+{type:'line', name:'yarn Line', description:'very weak line', strength:20 , status: "active"});
 playerInventory.bait.push({ type: 'bait', name: 'Worm', quantity: 20, lure:15, spawnTime: 3000, status: "active" });
 
  
@@ -78,29 +79,28 @@ let responding = false;
 let Rewards = {
     gear:[
         // rods
-        { type:'rod', name: 'Childrens fishing rod', description:'Just about better than a stick', speed: 3 },
-        { type:'rod', name: 'Trolling rod', description:'Perfect for fishing on a boat', speed: 5 },
-        { type:'rod', name: 'Composite trolling rod', description:'Strong and light weight', speed: 6, spawnBonus:0.2 },
-        { type:'rod', name: 'Graphite trolling rod', description:'The ultimate rod', speed: 8, spawnBonus:0.4 },
+        { type:'rod', rarity:"Common", name: 'Childrens fishing rod', description:'Just about better than a stick', speed: 3, spawnBonus:0, status: "inActive" },
+        { type:'rod', rarity:"Rare", name: 'Trolling rod', description:'Perfect for fishing on a boat', speed: 5, spawnBonus:0, status: "inActive" },
+        { type:'rod', rarity:"Epic", name: 'Composite trolling rod', description:'Strong and light weight', speed: 6, spawnBonus:0.2, status: "inActive" },
+        { type:'rod', rarity:"Legendary", name: 'Graphite trolling rod', description:'The ultimate rod', speed: 8, spawnBonus:0.4, status: "inActive" },
 
         // line
-        { type:'line', name:'Old fishing line', description:'better than yarn atleast', strength:30 },
-        { type:'line', name:'Monofilament Line', description:'cheap basic fishing line', strength:35 },
-        { type:'line', name:'Braid Fishing Line', description:'Offers twice the strenght of monofilament', strength:60 },
-        { type:'line', name:'Fluorocarbon Fishing Line', description:'Perfect complement to braid', strength:65, lureBonus: 0.2 },
-        { type:'line', name:'Spiderwire Braid', description:'The ultimate fishing line', strength:75, lureBonus:0.4 }
+        { type:'line', rarity:"Common", name:'Old fishing line', description:'better than yarn atleast', strength:30, status: "inActive" },
+        { type:'line', rarity:"Rare", name:'Monofilament Line', description:'cheap basic fishing line', strength:35, status: "inActive" },
+        { type:'line', rarity:"Epic", name:'Fluorocarbon Fishing Line', description:'Perfect complement to braid', strength:65, lureBonus: 0.2, status: "inActive" },
+        { type:'line', rarity:"Legendary", name:'Spiderwire Braid', description:'The ultimate fishing line', strength:75, lureBonus:0.4, status: "inActive" }
     ],
     bait:[
-        { type: 'bait', name: 'Worm', quantity: 20, lure:15, spawnTime: 3000, status: "inActive" },
-        { type: 'bait', name: 'Shrimp', quantity: 20, lure:20, spawnTime: 3000, status: "inActive" },
-        { type: 'bait', name: 'Fish Food', quantity: 5, lure:25, spawnTime: 2500, status: "inActive" },
-        { type: 'bait', name: 'Cheese', quantity: 10, lure:25, spawnTime: 2250, status: "inActive" },
-        { type: 'bait', name: 'Basic Lure', quantity: 100, lure:20, spawnTime: 2500, status: "inActive" },
-        { type: 'bait', name: 'Minnow', quantity: 7, lure:30, spawnTime: 500, status: "inActive" },
-        { type: 'bait', name: 'Special Lure', quantity: 100, lure:30, spawnTime: 1500, status: "inActive" },
-        { type: 'bait', name: 'Golden Fish Food', quantity: 3, lure:35, spawnTime: 4000, status: "inActive" },
-        { type: 'bait', name: 'Golden Special Lure', quantity: 100, lure:35, spawnTime: 1500, status: "inActive" },
-        { type: 'bait', name: 'True Bait', quantity: 5, lure:40, spawnTime: 1500, status: "inActive" }
+        { type: 'bait', rarity:"Common", name: 'Worm', quantity: 20, lure:15, spawnTime: 3000, status: "inActive" },
+        { type: 'bait', rarity:"Common", name: 'Shrimp', quantity: 20, lure:20, spawnTime: 3000, status: "inActive" },
+        { type: 'bait', rarity:"Common", name: 'Fish Food', quantity: 5, lure:25, spawnTime: 2500, status: "inActive" },
+        { type: 'bait', rarity:"Rare", name: 'Cheese', quantity: 10, lure:25, spawnTime: 2250, status: "inActive" },
+        { type: 'bait', rarity:"Rare", name: 'Basic Lure', quantity: 100, lure:20, spawnTime: 2500, status: "inActive" },
+        { type: 'bait', rarity:"Epic", name: 'Minnow', quantity: 7, lure:30, spawnTime: 500, status: "inActive" },
+        { type: 'bait', rarity:"Epic", name: 'Special Lure', quantity: 100, lure:30, spawnTime: 1500, status: "inActive" },
+        { type: 'bait', rarity:"Epic", name: 'Golden Fish Food', quantity: 3, lure:35, spawnTime: 4000, status: "inActive" },
+        { type: 'bait', rarity:"Legendary", name: 'Golden Special Lure', quantity: 100, lure:35, spawnTime: 1500, status: "inActive" },
+        { type: 'bait', rarity:"Legendary", name: 'True Bait', quantity: 5, lure:40, spawnTime: 1500, status: "inActive" }
     ]
 }
 
@@ -143,6 +143,7 @@ let fishing = true;
 let option = false;
 let feeding = false;
 let gameOver = false;
+let inventory = false;
 
 // window
 //============================================================
@@ -262,6 +263,57 @@ function draw() {
         contextText.font = "50px Arial";
         contextText.fillText("New game", 500, 900);
     }
+    if (inventory)
+    {
+        context.fillStyle = "#000";
+        context.fillRect(0, 0, canvas.width, canvas.height);
+        contextText.fillStyle = "white";
+        contextText.font = "50px Arial";
+        contextText.fillText("you ran out of bait", 150, 60);
+
+        context.fillStyle = "#FF4488";
+        context.fillRect(400, 850, 350,230);
+        contextText.fillStyle = "white";
+        contextText.font = "50px Arial";
+        contextText.fillText("New game", 500, 900);
+
+
+    }
+}
+
+function getRandomItemByRarity(rarity) {
+    // Filter the rewards by the given rarity
+    let itemsByRarity = Rewards.gear.concat(Rewards.bait).filter(item => item.rarity === rarity);
+    // Return a random item from the filtered list
+    return itemsByRarity[Math.floor(Math.random() * itemsByRarity.length)];
+}
+
+function rewardPlayerForFish(fish) {
+    // Determine the rarity of the fish caught
+    let fishRarity = fish.rarity;
+
+    // Use random variance to determine if the player gets a reward, and what type
+    let rewardChance = Math.random(); // Random number between 0 and 1
+
+    // Higher rarity fish gives higher chance for better rewards
+    let rewardType;
+    if (rewardChance < 0.5) {
+        rewardType = 'gear'; // 50% chance to get gear
+    } else {
+        rewardType = 'bait'; // 50% chance to get bait
+    }
+
+    // Get a reward item based on the rarity of the fish and random variance
+    let reward = getRandomItemByRarity(fishRarity);
+
+    // Add the reward to the player's inventory based on its type
+    if (reward.type === 'rod' || reward.type === 'line') {
+        playerInventory.gear.push(reward);
+    } else if (reward.type === 'bait') {
+        playerInventory.bait.push(reward);
+    }
+
+    console.log(`You caught a ${fish.name} (${fish.rarity}) and received a ${reward.name}!`);
 }
 
 
@@ -271,6 +323,11 @@ function resetCast()
     amountReeled = 0;
     casted = false;
     fishSpawnTime = playerInventory.bait.find(item => item.type == "bait").spawnTime;
+    if (playerInventory.gear.find(item => item.type == "rod").spawnBonus > 0)
+        {
+            fishSpawnTime = fishSpawnTime - (fishSpawnTime * playerInventory.gear.find(item => item.type == "rod").spawnBonus)
+            console.log("you have a spawn bonus")
+        }
     fishSpawned = false
 }
 
@@ -363,7 +420,9 @@ function feed()
     }
     else
     {
+        rewardPlayerForFish(playerInventory.loot.find(item => item.type === "fish"));
         APhaistResponse = "That's a tasty " + playerInventory.loot[playerInventory.loot.length - 1].name;
+        console.log(playerInventory)
         playerInventory.loot.pop();
     }
 }
