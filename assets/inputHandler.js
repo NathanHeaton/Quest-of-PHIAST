@@ -27,6 +27,8 @@ let mouseUp = false;
 
 function mouseScroll(event)
 {
+    event.preventDefault();
+
     if(casted && fishSpawned)
     {
         let rod = playerInventory.gear.find(item => item.type === "rod" && item.status == "active");// gets the players rod from their inventory
@@ -53,6 +55,7 @@ function mouseScroll(event)
         }
     }
 }
+
 
 function mouseLetGo()
 {
@@ -257,6 +260,8 @@ function touchInput(event)
 
 function input(event) {
     // Take Input from the Player
+    event.preventDefault();
+
 if (event.type === "keydown") {
     if (event.key == " " &&!casted)
     {

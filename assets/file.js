@@ -15,7 +15,7 @@ let hook = {x : 200, y : 250};
 let lineStrength = 20;
 let LineSnapAmount = 0;
 let lineSnapped = false;
-let LineSnapMessage = "your line snapped don't let the hook go white"
+let LineSnapMessage = "your line snapped don't let the hook get white"
 
 let casted = false;
 
@@ -94,7 +94,7 @@ let Rewards = {
         { type:'line', rarity:"Legendary", name:'Spiderwire Braid', description:'The ultimate fishing line', strength:75, lureBonus:0.4, status: "inActive", s:{x: 4,y:1} }
     ],
     bait:[
-        { type: 'bait', rarity:"Common", name: 'Worm', quantity: 5, lure:15, spawnTime: 3000, status: "inActive", s:{x: 0,y:0} },
+        { type: 'bait', rarity:"Common", name: 'Worm', quantity: 2, lure:15, spawnTime: 3000, status: "inActive", s:{x: 0,y:0} },
         { type: 'bait', rarity:"Common", name: 'Shrimp', quantity: 3, lure:20, spawnTime: 3000, status: "inActive", s:{x: 1,y:0} },
         { type: 'bait', rarity:"Common", name: 'Fish Food', quantity: 2, lure:25, spawnTime: 2500, status: "inActive", s:{x: 2,y:0} },
         { type: 'bait', rarity:"Rare", name: 'Cheese', quantity: 5, lure:25, spawnTime: 2250, status: "inActive", s:{x: 3,y:0} },
@@ -227,7 +227,7 @@ function draw() {
         context.drawImage(background,0,0,canvas.width,canvas.height);
         if (casted)
         {
-            
+            drawLine();
             context.fillStyle = "#000";
             if(fishSpawned)
             {
@@ -321,6 +321,13 @@ function draw() {
 
 
     }
+}
+
+function drawLine() {
+    context.beginPath();       // Start a new path
+    context.moveTo(991,597);    // Move to the starting point
+    context.lineTo(hook.x+5, hook.y);    // Draw a line to the ending point
+    context.stroke();          // Render the line
 }
 
 function drawIventoryItems(sprite, data, x, y){
@@ -611,6 +618,8 @@ function update() {
     {
         if (casted)
         {
+            hookDrift();
+            keepHookInCorrectSpot();
             spawnFish();
             catchFish();
 
@@ -628,8 +637,21 @@ function gameloop() {
     window.requestAnimationFrame(gameloop);
 }
 
-function boundaryCheck(){
 
+function hookDrift(){
+
+
+}
+
+function keepHookInCorrectSpot(){
+    if(hook.y < 635)
+        {
+            hook.y = 635;
+        }
+    else if (hook.y > 894)
+        {
+            hook.y = 894;
+        }
 }
 
 
