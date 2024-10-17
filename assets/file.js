@@ -67,33 +67,9 @@ let playerInventory = {
 }
 
 
-playerInventory.gear.push({ type:'rod', rarity:"basic" , name: 'Stick Fishing Rod', description:'normal stick with a wire stuck to it', speed: 2, spawnBonus:0.5, status: "active", s:{x: 1,y:0} },
+playerInventory.gear.push({ type:'rod', rarity:"basic" , name: 'Stick Fishing Rod', description:'normal stick with a wire stuck to it', speed: 2, status: "active", s:{x: 1,y:0} },
 {type:'line', rarity:"basic", name:'yarn Line', description:'very weak line', strength:20 , status: "active", s:{x: 0,y:1}});
 playerInventory.bait.push({ type: 'bait', rarity:"basic", name: 'Worm', quantity: 5, lure:15, spawnTime: 3000, status: "active", s:{x: 0,y:0} });
-
-playerInventory.loot.push(
-    { type:"fish", name:"Bass", rarity:"Common", reelTime: 40 },
-    { type:"fish", name:"Trout", rarity:"Common", reelTime: 30 },
-    { type:"fish", name:"Pike", rarity:"Common", reelTime: 55 },
-    { type:"fish", name:"Walleye", rarity:"Common", reelTime: 35 },
-    { type:"fish", name:"Carp", rarity:"Common", reelTime: 45 },
-    { type:"fish", name:"Sauger", rarity:"Rare", reelTime:70 },
-    { type:"fish", name:"Blue Catfish", rarity:"Rare", reelTime: 80 },
-    { type:"fish", name:"Black Crappie", rarity:"Rare", reelTime: 75 },
-    { type:"fish", name:"White Crappie", rarity:"Epic", reelTime:90 },
-    { type:"junk", name:"Swimming Goggles", rarity:"Rare", reelTime: 25 },
-    { type:"junk", name:"Tin Can", rarity:"Common", reelTime:15 },
-    { type:"junk", name:"Broken Net", rarity:"Common", reelTime: 60 },
-    { type:"fish", name:"White Crappie", rarity:"Epic", reelTime:90 },
-    { type:"fish", name:"Sunfish Bluegill", rarity:"Epic", reelTime: 110 },
-    { type:"fish", name:"Rainbow Trout", rarity:"Epic", reelTime: 120 },
-    { type:"fish", name:"Salmon of Knowledge", rarity:"Legendary", reelTime: 150 },
-    { type:"junk", name:"Swimming Goggles", rarity:"Rare", reelTime: 25 },
-    { type:"junk", name:"Tin Can", rarity:"Common", reelTime:15 },
-    { type:"junk", name:"Broken Net", rarity:"Common", reelTime: 60 },
-    { type:"junk", name:"Ancient Sword", rarity:"Epic", reelTime: 105 },
-    { type:"junk", name:"Gold Ring", rarity:"Legendary", reelTime: 140 }
-)
 
  
 //An Phaist vars
@@ -331,7 +307,6 @@ function draw() {
         {
             let x = 300 + (i * (ITEM_FRAME + 75));
             let y = 300;
-            console.log
             drawIventoryItems(baitItem, playerInventory.bait.at(i),x,y);
 
         }
@@ -339,7 +314,6 @@ function draw() {
         {
             let x = 300 + (i * (ITEM_FRAME + 75));
             let y = 600;
-            console.log
             drawIventoryItems(rodItem, playerInventory.gear.at(i),x,y);
 
         }
@@ -481,7 +455,6 @@ function resetCast()
     if (playerInventory.gear.find(item => item.type == "rod").spawnBonus > 0)
         {
             fishSpawnTime = fishSpawnTime - (fishSpawnTime * playerInventory.gear.find(item => item.type == "rod" && item.status == "active").spawnBonus)
-            console.log("you have a spawn bonus")
         }
     fishSpawned = false
 }
@@ -490,7 +463,6 @@ function pickFishRarity(t_bait)
 {
     let lootPool = [];
 
-    console.log(t_bait);
     // based on the player lure makes the loot pool
     if (t_bait.lure <= 15)
     {
@@ -523,10 +495,8 @@ function pickFishRarity(t_bait)
     if (lootPool.length > 0) {
         rngNumber = Math.floor(Math.random() * lootPool.length);
     } else {
-        console.log("No items in the loot pool!");
         return null;
     }
-    console.log(lootPool);
 
     return lootPool[rngNumber];
 }
@@ -558,7 +528,6 @@ function spawnFish()
     else if (!fishSpawned)
     {
         resetGame();
-        console.log("you have "+ playerbait.quantity + " remaining");
     }
 }
 
@@ -578,7 +547,6 @@ function feed()
 
         rewardPlayerForFish(playerInventory.loot.findLast(item => item.type === "fish" || item.type === "junk"));
         APhaistResponse = "That's a tasty " + playerInventory.loot[playerInventory.loot.length - 1].name;
-        console.log(playerInventory)
         playerInventory.loot.pop();
     }
 }

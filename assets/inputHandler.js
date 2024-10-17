@@ -31,7 +31,6 @@ function mouseScroll(event)
     {
         let rod = playerInventory.gear.find(item => item.type === "rod" && item.status == "active");// gets the players rod from their inventory
         let line = playerInventory.gear.find(item => item.type === "line" && item.status == "active");
-        console.log(event.deltaY);
         if(event.deltaY > 1)
         {
             amountReeled += rod.speed;//gets the speed of the reel
@@ -43,14 +42,12 @@ function mouseScroll(event)
         {
             amountReeled -= rod.speed / 8;
             LineSnapAmount -= line.strength * 2;
-            console.log("line :"+ LineSnapAmount);
             animatedLineIn(-1);// letting out
         }
 
         // resets progress if line snaps
         if (LineSnapAmount > 255)
         {
-            console.log("line snapped");
             lineSnapped = true;
             resetCast();
         }
@@ -143,7 +140,6 @@ function mouseInput(event)
 
         if (mouseX >= ratioX*1376 && mouseX <= ratioX*1900 && mouseY >= 150*ratioY && mouseY <= 225*ratioY) 
         {
-            console.log("inventory")
             fishing = false;
             inventory = true;
             responding = false;
@@ -160,7 +156,6 @@ function mouseInput(event)
         else if (mouseX >= ratioX*10 && mouseX <= ratioX*360 && mouseY >= 850*ratioY && mouseY <= 1080*ratioY) 
         {
             feed();//feeds an phiast
-            console.log("feeding")
         }
     }
     if(gameOver)
@@ -275,7 +270,6 @@ if (event.type === "keyup") {
     if (casted)
     {
         resetCast()
-        console.log("key up")
     }
 }
 
