@@ -58,6 +58,8 @@ let fishReelTime;
 //player vars
 //======================================
 
+let clickableItems = [];
+
 let playerInventory = {
     loot:[],
     gear:[],
@@ -65,9 +67,9 @@ let playerInventory = {
 }
 
 
-playerInventory.gear.push({ type:'rod', name: 'Stick Fishing Rod', description:'normal stick with a wire stuck to it', speed: 2, spawnBonus:0.5, status: "active", s:{x: 1,y:0} },
-{type:'line', name:'yarn Line', description:'very weak line', strength:20 , status: "active", s:{x: 0,y:1}});
-playerInventory.bait.push({ type: 'bait', name: 'Worm', quantity: 20, lure:15, spawnTime: 3000, status: "active", s:{x: 0,y:0} });
+playerInventory.gear.push({ type:'rod', rarity:"basic" , name: 'Stick Fishing Rod', description:'normal stick with a wire stuck to it', speed: 2, spawnBonus:0.5, status: "active", s:{x: 1,y:0} },
+{type:'line', rarity:"basic", name:'yarn Line', description:'very weak line', strength:20 , status: "active", s:{x: 0,y:1}});
+playerInventory.bait.push({ type: 'bait', rarity:"basic", name: 'Worm', quantity: 20, lure:15, spawnTime: 3000, status: "active", s:{x: 0,y:0} });
 
 playerInventory.loot.push(
     { type:"fish", name:"Bass", rarity:"Common", reelTime: 40 },
@@ -308,16 +310,84 @@ function draw() {
         context.fillRect(0, 0, canvas.width, canvas.height);
         contextText.fillStyle = "white";
         contextText.font = "50px Arial";
-        contextText.fillText("you ran out of bait", 150, 60);
+        contextText.fillText("Inventory", 150, 60);
 
         context.fillStyle = "#FF4488";
         context.fillRect(400, 850, 350,230);
         contextText.fillStyle = "white";
         contextText.font = "50px Arial";
-        contextText.fillText("New game", 500, 900);
+        contextText.fillText("fish", 500, 900);
+
+        for(let i = 0; i < playerInventory.bait.length;i++)
+        {
+            let x = 300 + (i * (ITEM_FRAME + 75));
+            let y = 300;
+            console.log
+            drawIventoryItems(baitItem, playerInventory.bait.at(i),x,y);
+
+        }
+        for(let i = 0; i < playerInventory.gear.length;i++)
+        {
+            let x = 300 + (i * (ITEM_FRAME + 75));
+            let y = 600;
+            console.log
+            drawIventoryItems(rodItem, playerInventory.gear.at(i),x,y);
+
+        }
+
 
 
     }
+}
+
+function drawIventoryItems(sprite, data, x, y){
+
+    clickableItems.push({
+        x: x - 25,
+        y: y - 25,
+        width: ITEM_FRAME + 50,
+        height: 50,
+        item: data
+    });
+
+    // if equiped or not
+    if (data.status === "active")
+    {   
+        context.fillStyle = "#FF4488";
+        context.fillRect(x-25, y-25, ITEM_FRAME + 50, 50);
+        contextText.fillStyle = "white";
+        contextText.font = "15px Arial";
+        contextText.fillText("un equip", x-15, y-15);
+    }
+    else 
+    {
+        context.fillStyle = "#BB2244";
+        context.fillRect(x-25, y-25, ITEM_FRAME + 50, 50);
+        contextText.fillStyle = "white";
+        contextText.font = "15px Arial";
+        contextText.fillText("equip", x-15, y-15);
+    }
+    // text description and rarity
+    contextText.fillStyle = "white";
+    contextText.font = "15px Arial";
+    if (data.type != "bait")
+        {
+        contextText.fillText(data.description, x-15, y+ITEM_FRAME+15,150);
+        }
+    else{contextText.fillText("quantity: " +data.quantity, x-15, y+ITEM_FRAME+15,150);}
+    contextText.fillStyle = "white";
+    contextText.font = "15px Arial";
+
+    contextText.fillText("rarity: " + data.rarity, x-15, y+ITEM_FRAME+35,150);
+
+    context.drawImage(sprite.spritesheet,data.s.x * ITEM_FRAME, data.s.y * ITEM_FRAME,ITEM_FRAME,ITEM_FRAME, 
+        x,
+        y,
+        ITEM_FRAME,
+        ITEM_FRAME
+        );
+
+
 }
 
 
@@ -331,6 +401,10 @@ function drawItem(sprite, data){
         );
 
 }
+
+////////////////////////////////////////
+// code from chat gpt 4-o
+///////////////////////////////////////////
 
 function getRandomItemByRarity(rarity) {
     // Filter the rewards by the given rarity
@@ -381,6 +455,10 @@ function rewardPlayerForFish(fish) {
 
     rewardMessage = `You caught a ${fish.name} (${fish.rarity}) and received a ${reward.name}!`;
 }
+
+/////////////////////////////////////////////////////////////
+// end of code from gpt 4-0
+///////////////////////////////////////////////////////////////
 
 
 function resetCast()

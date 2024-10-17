@@ -135,14 +135,15 @@ function mouseInput(event)
             lineSnapped = false;
         }
 
-        if (mouseX >= ratioX*1500 && mouseX <= ratioX*1900 && mouseY >= 20*ratioY && mouseY <= 140*ratioY) 
+        if (mouseX >= ratioX*1376 && mouseX <= ratioX*1900 && mouseY >= 20*ratioY && mouseY <= 109*ratioY) 
         {
             feeding = true;
             fishing = false;
         }
 
-        if (mouseX >= ratioX*1500 && mouseX <= ratioX*1900 && mouseY >= 300*ratioY && mouseY <= 420*ratioY) 
+        if (mouseX >= ratioX*1376 && mouseX <= ratioX*1900 && mouseY >= 150*ratioY && mouseY <= 225*ratioY) 
         {
+            console.log("inventory")
             fishing = false;
             inventory = true;
             responding = false;
@@ -165,21 +166,48 @@ function mouseInput(event)
     if(gameOver)
     {
         if (mouseX >= ratioX*400 && mouseX <= ratioX*750 && mouseY >= 850*ratioY && mouseY <= 1080*ratioY) 
-            {
-                gameOver = false;
-                fishing = true;
-                responding = false;
-            }
+        {
+            gameOver = false;
+            fishing = true;
+            responding = false;
+        }
     }
     if(inventory)
+    {
+        if (mouseX >= ratioX*400 && mouseX <= ratioX*750 && mouseY >= 850*ratioY && mouseY <= 1080*ratioY) 
         {
-            if (mouseX >= ratioX*400 && mouseX <= ratioX*750 && mouseY >= 850*ratioY && mouseY <= 1080*ratioY) 
-                {
-                    inventory = false;
-                    fishing = true;
+            inventory = false;
+            fishing = true;
 
-                }
         }
+
+            // Loop through all clickable items to check if the click was on an item
+        for (let i = 0; i < clickableItems.length; i++) {
+            const itemArea = clickableItems[i];
+            if (mouseX >= itemArea.x && mouseX <= itemArea.x + itemArea.width &&
+                mouseY >= itemArea.y && mouseY <= itemArea.y + itemArea.height) {
+
+                // Toggle equip/unequip status
+                if (itemArea.item.status === "active") {
+                    itemArea.item.status = "inactive"; // Unequip item
+                } else {
+                    // Ensure only one item of the same type can be equipped at a time
+                    playerInventory.gear.forEach(gear => {
+                        if (gear.type === itemArea.item.type) {
+                            gear.status = "inactive"; // Unequip other items of the same type
+                        }
+                    });
+                    playerInventory.bait.forEach(bait => {
+                        if (bait.type === itemArea.item.type) {
+                            bait.status = "inactive"; // Unequip other items of the same type
+                        }
+                    });
+                    itemArea.item.status = "active"; // Equip clicked item
+                }
+                break; // Exit the loop once an item is clicked
+            }
+        }
+    }
 
 }
 
