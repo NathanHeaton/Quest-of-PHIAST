@@ -141,12 +141,12 @@ function mouseInput(event)
             fishing = false;
         }
 
-        if (mouseX >= ratioX*1800 && mouseX <= ratioX*1920 && mouseY >= 300*ratioY && mouseY <= 450*ratioY) 
-            {
-                fishing = false;
-                inventory = true;
-                responding = false;
-            }
+        if (mouseX >= ratioX*1500 && mouseX <= ratioX*1900 && mouseY >= 300*ratioY && mouseY <= 420*ratioY) 
+        {
+            fishing = false;
+            inventory = true;
+            responding = false;
+        }
     }
     if(feeding)
     {
