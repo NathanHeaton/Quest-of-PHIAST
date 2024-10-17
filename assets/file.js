@@ -69,7 +69,7 @@ let playerInventory = {
 
 playerInventory.gear.push({ type:'rod', rarity:"basic" , name: 'Stick Fishing Rod', description:'normal stick with a wire stuck to it', speed: 2, spawnBonus:0.5, status: "active", s:{x: 1,y:0} },
 {type:'line', rarity:"basic", name:'yarn Line', description:'very weak line', strength:20 , status: "active", s:{x: 0,y:1}});
-playerInventory.bait.push({ type: 'bait', rarity:"basic", name: 'Worm', quantity: 20, lure:15, spawnTime: 3000, status: "active", s:{x: 0,y:0} });
+playerInventory.bait.push({ type: 'bait', rarity:"basic", name: 'Worm', quantity: 5, lure:15, spawnTime: 3000, status: "active", s:{x: 0,y:0} });
 
 playerInventory.loot.push(
     { type:"fish", name:"Bass", rarity:"Common", reelTime: 40 },
@@ -83,7 +83,16 @@ playerInventory.loot.push(
     { type:"fish", name:"White Crappie", rarity:"Epic", reelTime:90 },
     { type:"junk", name:"Swimming Goggles", rarity:"Rare", reelTime: 25 },
     { type:"junk", name:"Tin Can", rarity:"Common", reelTime:15 },
-    { type:"junk", name:"Broken Net", rarity:"Common", reelTime: 60 }
+    { type:"junk", name:"Broken Net", rarity:"Common", reelTime: 60 },
+    { type:"fish", name:"White Crappie", rarity:"Epic", reelTime:90 },
+    { type:"fish", name:"Sunfish Bluegill", rarity:"Epic", reelTime: 110 },
+    { type:"fish", name:"Rainbow Trout", rarity:"Epic", reelTime: 120 },
+    { type:"fish", name:"Salmon of Knowledge", rarity:"Legendary", reelTime: 150 },
+    { type:"junk", name:"Swimming Goggles", rarity:"Rare", reelTime: 25 },
+    { type:"junk", name:"Tin Can", rarity:"Common", reelTime:15 },
+    { type:"junk", name:"Broken Net", rarity:"Common", reelTime: 60 },
+    { type:"junk", name:"Ancient Sword", rarity:"Epic", reelTime: 105 },
+    { type:"junk", name:"Gold Ring", rarity:"Legendary", reelTime: 140 }
 )
 
  
@@ -109,16 +118,16 @@ let Rewards = {
         { type:'line', rarity:"Legendary", name:'Spiderwire Braid', description:'The ultimate fishing line', strength:75, lureBonus:0.4, status: "inActive", s:{x: 4,y:1} }
     ],
     bait:[
-        { type: 'bait', rarity:"Common", name: 'Worm', quantity: 20, lure:15, spawnTime: 3000, status: "inActive", s:{x: 0,y:0} },
-        { type: 'bait', rarity:"Common", name: 'Shrimp', quantity: 20, lure:20, spawnTime: 3000, status: "inActive", s:{x: 1,y:0} },
-        { type: 'bait', rarity:"Common", name: 'Fish Food', quantity: 5, lure:25, spawnTime: 2500, status: "inActive", s:{x: 2,y:0} },
-        { type: 'bait', rarity:"Rare", name: 'Cheese', quantity: 10, lure:25, spawnTime: 2250, status: "inActive", s:{x: 3,y:0} },
+        { type: 'bait', rarity:"Common", name: 'Worm', quantity: 5, lure:15, spawnTime: 3000, status: "inActive", s:{x: 0,y:0} },
+        { type: 'bait', rarity:"Common", name: 'Shrimp', quantity: 3, lure:20, spawnTime: 3000, status: "inActive", s:{x: 1,y:0} },
+        { type: 'bait', rarity:"Common", name: 'Fish Food', quantity: 2, lure:25, spawnTime: 2500, status: "inActive", s:{x: 2,y:0} },
+        { type: 'bait', rarity:"Rare", name: 'Cheese', quantity: 5, lure:25, spawnTime: 2250, status: "inActive", s:{x: 3,y:0} },
         { type: 'bait', rarity:"Rare", name: 'Basic Lure', quantity: 100, lure:20, spawnTime: 2500, status: "inActive", s:{x: 0,y:1} },
-        { type: 'bait', rarity:"Epic", name: 'Minnow', quantity: 7, lure:30, spawnTime: 500, status: "inActive", s:{x: 1,y:1} },
+        { type: 'bait', rarity:"Epic", name: 'Minnow', quantity: 1, lure:30, spawnTime: 500, status: "inActive", s:{x: 1,y:1} },
         { type: 'bait', rarity:"Epic", name: 'Special Lure', quantity: 100, lure:30, spawnTime: 1500, status: "inActive", s:{x: 2,y:1} },
-        { type: 'bait', rarity:"Epic", name: 'Golden Fish Food', quantity: 3, lure:35, spawnTime: 4000, status: "inActive", s:{x: 3,y:0} },
+        { type: 'bait', rarity:"Epic", name: 'Golden Fish Food', quantity: 1, lure:35, spawnTime: 4000, status: "inActive", s:{x: 3,y:0} },
         { type: 'bait', rarity:"Legendary", name: 'Golden Special Lure', quantity: 100, lure:35, spawnTime: 1500, status: "inActive", s:{x: 0,y:2} },
-        { type: 'bait', rarity:"Legendary", name: 'True Bait', quantity: 5, lure:40, spawnTime: 1500, status: "inActive", s:{x: 1,y:2} }
+        { type: 'bait', rarity:"Legendary", name: 'True Bait', quantity: 2, lure:40, spawnTime: 1500, status: "inActive", s:{x: 1,y:2} }
     ]
 }
 
@@ -349,7 +358,9 @@ function drawIventoryItems(sprite, data, x, y){
         height: 50,
         item: data
     });
-
+    contextText.fillStyle = "white";
+    contextText.font = "18px Arial";
+    contextText.fillText(data.name,x-15, y-50)
     // if equiped or not
     if (data.status === "active")
     {   
@@ -466,10 +477,10 @@ function resetCast()
     LineSnapAmount = 0;
     amountReeled = 0;
     casted = false;
-    fishSpawnTime = playerInventory.bait.find(item => item.type == "bait").spawnTime;
+    fishSpawnTime = playerInventory.bait.find(item => item.type == "bait" && item.status == "active" ).spawnTime;
     if (playerInventory.gear.find(item => item.type == "rod").spawnBonus > 0)
         {
-            fishSpawnTime = fishSpawnTime - (fishSpawnTime * playerInventory.gear.find(item => item.type == "rod").spawnBonus)
+            fishSpawnTime = fishSpawnTime - (fishSpawnTime * playerInventory.gear.find(item => item.type == "rod" && item.status == "active").spawnBonus)
             console.log("you have a spawn bonus")
         }
     fishSpawned = false
@@ -521,12 +532,12 @@ function pickFishRarity(t_bait)
 }
 
 function getBaitQuantity(){
-    return playerInventory.bait.find(item => item.type === "bait").quantity;
+    return playerInventory.bait.find(item => item.type === "bait"  && item.status == "active").quantity;
 }
 
 function spawnFish()
 {
-    let playerbait = playerInventory.bait.find(item => item.type === "bait");
+    let playerbait = playerInventory.bait.find(item => item.type === "bait"  && item.status == "active");
     if (playerbait.quantity > 0 && !fishSpawned)
     {
         if(fishSpawnTime <= 0 && !fishSpawned)
@@ -537,7 +548,7 @@ function spawnFish()
             randomFish = pickFishRarity(playerbait);
             fishReelTime = randomFish.reelTime;
             playerbait.quantity--;//uses up bait
-            fishSpawnTime = playerInventory.bait.find(item => item.type == "bait").spawnTime;
+            fishSpawnTime = playerInventory.bait.find(item => item.type == "bait"  && item.status == "active").spawnTime;
         }
         else if (!fishSpawned)
         {
