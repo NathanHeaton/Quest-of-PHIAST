@@ -60,6 +60,8 @@ let fishReelTime;
 
 let clickableItems = [];
 
+let gameWon = false;
+
 let playerInventory = {
     loot:[],
     gear:[],
@@ -71,7 +73,6 @@ playerInventory.gear.push({ type:'rod', rarity:"basic" , name: 'Stick Fishing Ro
 {type:'line', rarity:"basic", name:'yarn Line', description:'very weak line', strength:20 , status: "active", s:{x: 0,y:1}});
 playerInventory.bait.push({ type: 'bait', rarity:"basic", name: 'Worm', quantity: 5, lure:15, spawnTime: 3000, status: "active", s:{x: 0,y:0} });
 
- 
 //An Phaist vars
 //======================================
 let APhaistResponse = "you have no fish I might need to eat YOU!!!!";
@@ -321,6 +322,26 @@ function draw() {
 
 
     }
+    if (gameWon)
+    {
+        context.fillStyle = "#000";
+        context.fillRect(0, 0, canvas.width, canvas.height);
+        contextText.fillStyle = "white";
+        contextText.font = "50px Arial";
+        contextText.fillText("You gave An Phiast the knowledge he needs to live a normal life", 150, 60);
+
+        context.fillStyle = "#FF4488";
+        context.fillRect(400, 850, 350,230);
+        contextText.fillStyle = "white";
+        contextText.font = "50px Arial";
+        contextText.fillText("New game", 500, 900);
+
+        context.fillStyle = "#FF4488";
+        context.fillRect(800, 850, 350, 230);
+        contextText.fillStyle = "white";
+        contextText.font = "50px Arial";
+        contextText.fillText("Keep playing", 850, 900);
+    }
 }
 
 function drawLine() {
@@ -550,10 +571,17 @@ function feed()
         gameOverMessage = "An Phiast is hungry, and decide to eat you"
     }
     else
-    {
+    {   
 
         rewardPlayerForFish(playerInventory.loot.findLast(item => item.type === "fish" || item.type === "junk"));
         APhaistResponse = "That's a tasty " + playerInventory.loot[playerInventory.loot.length - 1].name;
+
+        if(playerInventory.loot[playerInventory.loot.length - 1].name == "Salmon of Knowledge")
+        {
+            playerInventory.loot.find(item => item.name === "Salmon of Knowledge")
+            feeding = false;
+            gameWon = true;
+        }
         playerInventory.loot.pop();
     }
 }
@@ -597,10 +625,9 @@ function passiveLineGain()
 {
     if ( amountReeled > 0)
     {
-        amountReeled -= 0.2;
-
+        amountReeled -= 0.05;
     }
-    LineSnapAmount += 0.02;
+    LineSnapAmount -= 0.2;
 }
 
 function update() {
@@ -670,8 +697,9 @@ function resetGame()
         bait:[]
     }
 
-    playerInventory.gear.push({ type:'rod', name: 'Stick Fishing Rod', speed: 2 },{type:'line', name:'yarn Line', strength:20});
-    playerInventory.bait.push({ type: 'bait', name: 'Worm', quantity: 1, lure:40, spawnTime: 3000 });
+    playerInventory.gear.push({ type:'rod', rarity:"basic" , name: 'Stick Fishing Rod', description:'normal stick with a wire stuck to it', speed: 2, status: "active", s:{x: 1,y:0} },
+        {type:'line', rarity:"basic", name:'yarn Line', description:'very weak line', strength:20 , status: "active", s:{x: 0,y:1}});
+        playerInventory.bait.push({ type: 'bait', rarity:"basic", name: 'Worm', quantity: 5, lure:15, spawnTime: 3000, status: "active", s:{x: 0,y:0} });
 
 
 
