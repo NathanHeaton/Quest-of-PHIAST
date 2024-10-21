@@ -170,6 +170,24 @@ function mouseInput(event)
             responding = false;
         }
     }
+    if(gameWon)
+        {
+            // reset game
+            if (mouseX >= ratioX*400 && mouseX <= ratioX*750 && mouseY >= 850*ratioY && mouseY <= 1080*ratioY) 
+            {
+                resetGame()
+                gameWon = false;
+                fishing = true;
+                responding = false;
+            }
+            // start new
+            if (mouseX >= ratioX*800 && mouseX <= ratioX*1050 && mouseY >= 850*ratioY && mouseY <= 1080*ratioY) 
+            {
+                gameWon = false;
+                fishing = true;
+                responding = false;
+            }
+        }
     if(inventory)
     {
         if (mouseX >= ratioX*400 && mouseX <= ratioX*750 && mouseY >= 850*ratioY && mouseY <= 1080*ratioY) 
