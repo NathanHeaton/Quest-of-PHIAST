@@ -69,9 +69,19 @@ let playerInventory = {
 }
 
 
-playerInventory.gear.push({ type:'rod', rarity:"basic" , name: 'Stick Fishing Rod', description:'normal stick with a wire stuck to it', speed: 2, status: "active", s:{x: 1,y:0} },
+playerInventory.gear.push({ type:'rod', rarity:"basic" , name: 'Stick Fishing Rod', description:'normal stick with a wire stuck to it', speed: 2, status: "active", s:{x: 0,y:0} },
 {type:'line', rarity:"basic", name:'yarn Line', description:'very weak line', strength:20 , status: "active", s:{x: 0,y:1}});
 playerInventory.bait.push({ type: 'bait', rarity:"basic", name: 'Worm', quantity: 5, lure:15, spawnTime: 3000, status: "active", s:{x: 0,y:0} });
+
+playerInventory.loot.push(
+{ type:"fish", name:"Sauger", rarity:"Rare", reelTime:70 },
+{ type:"fish", name:"Blue Catfish", rarity:"Rare", reelTime: 80 },
+{ type:"fish", name:"Black Crappie", rarity:"Rare", reelTime: 75 },
+{ type:"fish", name:"White Crappie", rarity:"Epic", reelTime:90 },
+{ type:"fish", name:"Sunfish Bluegill", rarity:"Epic", reelTime: 110 },
+{ type:"fish", name:"Rainbow Trout", rarity:"Epic", reelTime: 120 },
+{ type:"fish", name:"Salmon of Knowledge", rarity:"Legendary", reelTime: 150 },
+)
 
 //An Phaist vars
 //======================================
@@ -83,7 +93,7 @@ let rewardMessage = "";
 let Rewards = {
     gear:[
         // rods
-        { type:'rod', rarity:"Common", name: 'Childrens fishing rod', description:'Just about better than a stick', speed: 3, spawnBonus:0, status: "inActive", s:{x: 0,y:0} },
+        { type:'rod', rarity:"Common", name: 'Childrens fishing rod', description:'Just about better than a stick', speed: 3, spawnBonus:0, status: "inActive", s:{x: 1,y:0} },
         { type:'rod', rarity:"Rare", name: 'Trolling rod', description:'Perfect for fishing on a boat', speed: 5, spawnBonus:0, status: "inActive", s:{x: 2,y:0}  },
         { type:'rod', rarity:"Epic", name: 'Composite trolling rod', description:'Strong and light weight', speed: 6, spawnBonus:0.2, status: "inActive", s:{x: 3,y:0}  },
         { type:'rod', rarity:"Legendary", name: 'Graphite trolling rod', description:'The ultimate rod', speed: 8, spawnBonus:0.4, status: "inActive", s:{x: 3,y:0}  },
@@ -91,8 +101,9 @@ let Rewards = {
         // line
         { type:'line', rarity:"Common", name:'Old fishing line', description:'better than yarn atleast', strength:30, status: "inActive", s:{x: 1,y:1} },
         { type:'line', rarity:"Rare", name:'Monofilament Line', description:'cheap basic fishing line', strength:35, status: "inActive", s:{x: 2,y:1} },
-        { type:'line', rarity:"Epic", name:'Fluorocarbon Fishing Line', description:'Perfect complement to braid', strength:65, lureBonus: 0.2, status: "inActive", s:{x: 3,y:1} },
-        { type:'line', rarity:"Legendary", name:'Spiderwire Braid', description:'The ultimate fishing line', strength:75, lureBonus:0.4, status: "inActive", s:{x: 4,y:1} }
+        { type:'line', rarity:"Rare", name:'Braided', description:'Perfect braid', strength:50, lureBonus: 0.2, status: "inActive", s:{x: 3,y:1} },
+        { type:'line', rarity:"Epic", name:'Fluorocarbon Fishing Line', description:'Perfect complement to braid', strength:65, lureBonus: 0.3, status: "inActive", s:{x: 4,y:1} },
+        { type:'line', rarity:"Legendary", name:'Spiderwire Braid', description:'The ultimate fishing line', strength:75, lureBonus:0.4, status: "inActive", s:{x: 1,y:1} }
     ],
     bait:[
         { type: 'bait', rarity:"Common", name: 'Worm', quantity: 2, lure:15, spawnTime: 3000, status: "inActive", s:{x: 0,y:0} },
@@ -112,7 +123,7 @@ let gameOverMessage = "you ran out of bait";
 
 // image setup
 //=======================================================
-const ITEM_FRAME = 100;
+const ITEM_FRAME = 150;
 
 let background = new Image();
 background.src = "assets/img/Background + UI elements.png";
@@ -126,7 +137,7 @@ baitAssets.src = "assets/img/Bait assets.png";
 let baitItem = new GameObject(baitAssets,50,825,ITEM_FRAME,ITEM_FRAME);
 
 let gameAssets = new Image();
-gameAssets.src = "assets/img/Game assets.png";
+gameAssets.src = "assets/img/gear spritesheet.png";
 
 let rodItem = new GameObject(gameAssets,100 +ITEM_FRAME,825,ITEM_FRAME,ITEM_FRAME);
 
