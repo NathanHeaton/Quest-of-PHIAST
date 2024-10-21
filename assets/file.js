@@ -618,13 +618,14 @@ function update() {
     {
         if (casted)
         {
-            hookDrift();
+
             keepHookInCorrectSpot();
             spawnFish();
             catchFish();
 
             if(fishSpawned)
             {
+                hookDrift();
                 passiveLineGain();
             }
         }
@@ -637,9 +638,13 @@ function gameloop() {
     window.requestAnimationFrame(gameloop);
 }
 
+let hookDriftAmount =0;
 
 function hookDrift(){
+    hookDriftAmount =Math.floor(Math.random() * 11) - 5;
 
+    hook.x += hookDriftAmount/5;
+    hook.y += hookDriftAmount/10;
 
 }
 
