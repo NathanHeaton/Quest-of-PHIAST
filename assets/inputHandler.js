@@ -16,7 +16,6 @@ let mousePos = {
 
 window.addEventListener("touchstart", touchInput);
 
-
 canvas.addEventListener("mousedown", mouseInput);
 canvas.addEventListener("wheel", mouseScroll);
 canvas.addEventListener("mouseup",mouseLetGo);

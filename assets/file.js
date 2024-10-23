@@ -122,10 +122,10 @@ let Rewards = {
         { type: 'bait', rarity:"Common", name: 'Worm', quantity: 2, lure:15, spawnTime: 3000, status: "inActive", s:{x: 0,y:0} },
         { type: 'bait', rarity:"Common", name: 'Shrimp', quantity: 3, lure:20, spawnTime: 3000, status: "inActive", s:{x: 1,y:0} },
         { type: 'bait', rarity:"Common", name: 'Fish Food', quantity: 2, lure:25, spawnTime: 2500, status: "inActive", s:{x: 2,y:0} },
-        { type: 'bait', rarity:"Rare", name: 'Cheese', quantity: 5, lure:25, spawnTime: 2250, status: "inActive", s:{x: 3,y:0} },
-        { type: 'bait', rarity:"Rare", name: 'Basic Lure', quantity: 100, lure:20, spawnTime: 2500, status: "inActive", s:{x: 0,y:1} },
+        { type: 'bait', rarity:"Rare", name: 'Cheese', quantity: 3, lure:25, spawnTime: 2250, status: "inActive", s:{x: 3,y:0} },
+        { type: 'bait', rarity:"Rare", name: 'Basic Lure', quantity: 7, lure:20, spawnTime: 2500, status: "inActive", s:{x: 0,y:1} },
         { type: 'bait', rarity:"Epic", name: 'Minnow', quantity: 1, lure:30, spawnTime: 500, status: "inActive", s:{x: 1,y:1} },
-        { type: 'bait', rarity:"Epic", name: 'Special Lure', quantity: 100, lure:30, spawnTime: 1500, status: "inActive", s:{x: 2,y:1} },
+        { type: 'bait', rarity:"Epic", name: 'Special Lure', quantity: 7, lure:30, spawnTime: 1500, status: "inActive", s:{x: 2,y:1} },
         { type: 'bait', rarity:"Epic", name: 'Golden Fish Food', quantity: 1, lure:35, spawnTime: 4000, status: "inActive", s:{x: 3,y:1} },
         { type: 'bait', rarity:"Legendary", name: 'Golden Special Lure', quantity: 100, lure:35, spawnTime: 1500, status: "inActive", s:{x: 0,y:2} },
         { type: 'bait', rarity:"Legendary", name: 'True Bait', quantity: 2, lure:40, spawnTime: 1500, status: "inActive", s:{x: 1,y:2} }
@@ -212,41 +212,6 @@ function draw() {
     // Clear Canvas
     context.clearRect(0, 0, canvas.width, canvas.height);
     
-    
-
-    if (pause == true) // can pause on any screen
-    {
-        context.fillStyle = "#00000088";
-        context.fillRect(0, 0, canvas.width, canvas.height);
-
-        // pause title
-        contextText.fillStyle = "white";
-        contextText.font = "80px Arial";
-        contextText.fillText("Pause", 450, 150);
-
-        contextText.font = "30px Copperplate";
-        contextText.fillText("Movement: WASD \n Interact: e \n Sprint: h", 10, 50);
-        
-        //return to game button
-        context.fillRect(450,200,200,75);
-        contextText.fillStyle = "black";
-        contextText.fillText("Return",500,240);
-        
-        // options button
-        contextText.fillStyle = "white";
-        context.fillRect(450,300,200,75);
-        contextText.fillStyle = "black";
-        contextText.fillText("Options",500,340);
-
-    }
-
-    if (option == true)
-    {
-        context.fillStyle = "#000";
-        context.fillRect(0, 0, canvas.width, canvas.height);
-
-    }
-
     if (fishing == true)
     {
         context.drawImage(background,0,0,canvas.width,canvas.height);
@@ -256,8 +221,11 @@ function draw() {
             context.fillStyle = "#000";
             if(fishSpawned)
             {
-                context.fillStyle = "#000";
-                context.fillRect(0,0,amountReeled,40);
+                //fish progress bar
+                context.fillStyle = "#072530";
+                context.fillRect(850,1000,fishReelTime,80);
+                context.fillStyle = "#b1d9e8";
+                context.fillRect(850,1000,amountReeled,80);
 
                 context.fillStyle = "rgb(255,"+ LineSnapAmount +"," + LineSnapAmount +")";
             }
@@ -266,6 +234,8 @@ function draw() {
         }
         if(fishCaught)
         {
+            context.fillStyle = "#072530";
+            context.fillRect(20,100,900,75);
             contextText.fillStyle = "white";
             contextText.font = "50px Arial";
             contextText.fillText("You caught ("+randomFish.rarity+ " " + randomFish.name + ")", 50, 150);
@@ -278,7 +248,7 @@ function draw() {
         }
         contextText.fillStyle = "white";
         contextText.font = "50px Arial";
-        contextText.fillText(getBaitQuantity(), baitItem.x, baitItem.y );
+        contextText.fillText(getBaitQuantity(), baitItem.x + 60, baitItem.y );
 
         // Item UI
         drawItem(baitItem, playerInventory.bait.find(item => item.status == "active"));
@@ -567,7 +537,15 @@ function getBaitQuantity(){
 function spawnFish()
 {
     let playerbait = playerInventory.bait.find(item => item.type === "bait"  && item.status == "active");
-    if (playerbait.quantity > 0 && !fishSpawned)
+
+    if (playerbait.quantity <= 0) // if the bait the player is using is out it auto swaps to a different bait
+    {
+        playerbait.status = "inActive";
+        playerbait = playerInventory.bait.find(item => item.type === "bait"  && item.quantity > 0);
+        playerbait.status = "active";
+    }
+
+    if (playerbait != undefined)
     {
         if(fishSpawnTime <= 0 && !fishSpawned)
         {
@@ -584,7 +562,7 @@ function spawnFish()
             fishSpawnTime -= playerbait.lure;// gets the lure of the bait
         }
     }
-    else if (!fishSpawned)
+    else // means player has no bait left
     {
         resetGame();
     }
@@ -676,16 +654,16 @@ function update() {
     {
         if (casted)
         {
-
             keepHookInCorrectSpot();
-            spawnFish();
-            catchFish();
-
             if(fishSpawned)
             {
                 hookDrift();
                 passiveLineGain();
             }
+            else{
+                spawnFish();
+            }
+            catchFish();
         }
     }
 }
@@ -757,3 +735,10 @@ window.addEventListener('keydown', input);
 window.addEventListener('keyup', input);
 
 window.addEventListener("mousedown", input)
+
+document.getElementById("start-btn").addEventListener("mousedown" , turnOn);
+
+function turnOn(){
+    canvas.style.display = "block";
+    document.getElementById("start-btn").style.display = "none";
+};

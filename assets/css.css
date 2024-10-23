@@ -34,6 +34,18 @@ footer{
 }
 
 .text{
-    max-width: 1200px;
+    max-width: 800px;
     margin: 40px auto;
+}
+
+#canvas{
+    display: none;
+}
+
+#start-btn{
+    background-color: #b1d9e8;
+    border-radius: 0;
+    border:0px;
+    padding: 15px 25px;
+    box-shadow: none;
 }
