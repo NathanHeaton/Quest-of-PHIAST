@@ -666,6 +666,7 @@ function update() {
 
     if (fishing)
     {
+        music.volume = 0.5;
         if (casted)
         {
             keepHookInCorrectSpot();
@@ -680,7 +681,7 @@ function update() {
             catchFish();
         }
     }
-    else{ocean.stop()}
+    else music.volume = 0.2;
 }
 
 function gameloop() {
