@@ -75,28 +75,6 @@ playerInventory.gear.push({ type:'rod', rarity:"basic" , name: 'Stick Fishing Ro
 {type:'line', rarity:"basic", name:'yarn Line', description:'very weak line', strength:20 , status: "active", s:{x: 0,y:1}});
 playerInventory.bait.push({ type: 'bait', rarity:"basic", name: 'Worm', quantity: 5, lure:15, spawnTime: 3000, status: "active", s:{x: 0,y:0} });
 
-playerInventory.loot.push(
-{ type:"fish", name:"Sauger", rarity:"Rare", reelTime:70 },
-{ type:"fish", name:"Blue Catfish", rarity:"Rare", reelTime: 80 },
-{ type:"fish", name:"Black Crappie", rarity:"Rare", reelTime: 75 },
-{ type:"fish", name:"White Crappie", rarity:"Epic", reelTime:90 },
-{ type:"fish", name:"Sunfish Bluegill", rarity:"Epic", reelTime: 110 },
-{ type:"fish", name:"Rainbow Trout", rarity:"Epic", reelTime: 120 },
-{ type:"fish", name:"Sauger", rarity:"Rare", reelTime:70 },
-{ type:"fish", name:"Blue Catfish", rarity:"Rare", reelTime: 80 },
-{ type:"fish", name:"Black Crappie", rarity:"Rare", reelTime: 75 },
-{ type:"fish", name:"White Crappie", rarity:"Epic", reelTime:90 },
-{ type:"fish", name:"Sunfish Bluegill", rarity:"Epic", reelTime: 110 },
-{ type:"fish", name:"Rainbow Trout", rarity:"Epic", reelTime: 120 },
-{ type:"fish", name:"Bass", rarity:"Common", reelTime: 40 },
-{ type:"fish", name:"Trout", rarity:"Common", reelTime: 30 },
-{ type:"fish", name:"Pike", rarity:"Common", reelTime: 55 },
-{ type:"fish", name:"Walleye", rarity:"Common", reelTime: 35 },
-{ type:"fish", name:"Carp", rarity:"Common", reelTime: 45 },
-{ type:"fish", name:"Sauger", rarity:"Rare", reelTime:70 },
-{ type:"fish", name:"Blue Catfish", rarity:"Rare", reelTime: 80 },
-{ type:"fish", name:"Black Crappie", rarity:"Rare", reelTime: 75 },
-)
 
 //An Phaist vars
 //======================================
