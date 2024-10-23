@@ -160,7 +160,7 @@ let lineItem =  new GameObject(gameAssets,150 +ITEM_FRAME+ITEM_FRAME,825,ITEM_FR
 // audio setup
 //=========================================================
 
-//let music = new Audio("assets/audio/dark castle Am ver.2.mp3");
+let music = new Audio("assets/audio/the-sea-is-calling-99289.mp3");
 
 // GameObject holds positional information
 // Can be used to hold other information based on requirements
@@ -172,10 +172,6 @@ function GameObject(spritesheet, x, y, width, height) {
     this.width = width;
     this.height = height;
 }
-
-// game object setup
-//=======================================================
-//let player = new GameObject(playerImage, playerx, playery, 16, 16);
 
 
 // render
@@ -627,6 +623,12 @@ function catchFish()
         resetCast();
         amountReeled = 0;
     }
+}
+
+playMusic();
+
+function playMusic(){
+    music.play();
 }
 
 // line slowly weakens and reel amount resets
