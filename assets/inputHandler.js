@@ -75,54 +75,7 @@ function mouseInput(event)
     let ratioY = canvas.clientHeight / 1080;
     let ratioX = canvas.clientWidth / 1920;
 
-    if(pause)// when in the pause screen
-    {
-        // Check if the click is inside the box
-        if (mouseX >= 450 && mouseX <= 600 && mouseY >= 200 && mouseY <= 275) 
-        {
-            pause = false;
-        }
 
-        if (mouseX >= 450 && mouseX <= 600 && mouseY >= 300 && mouseY <= 375) 
-        {
-            option = true;
-        }
-    }
-
-    if(option)
-    {
-        // Check if the click is inside the box
-        if (mouseX >= 450 && mouseX <= 600 && mouseY >= 200 && mouseY <= 275) 
-        {
-            pause = false;
-            option = false;
-        }
-
-        if (mouseX >= 450 && mouseX <= 600 && mouseY >= 300 && mouseY <= 375) 
-        {
-            audioMute = !audioMute;
-            changeVolume();
-        }
-
-        // for music volume slider
-        if (mouseX >= 100 && mouseX <= 300 && mouseY >= 200 && mouseY <= 225) 
-        {
-            isDragging = true;
-            
-            handleMouseMoveMusic(event);
-            changeVolume();
-
-        }
-        //for
-        if (mouseX >= 100 && mouseX <= 300 && mouseY >= 300 && mouseY <= 325) 
-        {
-            isDragging = true;
-            handleMouseMoveSFX(event);
-            changeVolume();
-        }
-
-
-    }
     // while the player is in the fishing screen
     if(fishing)
     {
@@ -138,6 +91,7 @@ function mouseInput(event)
         {
             feeding = true;
             fishing = false;
+            stopOcean();
         }
 
         if (mouseX >= ratioX*1376 && mouseX <= ratioX*1900 && mouseY >= 150*ratioY && mouseY <= 225*ratioY) 
@@ -145,6 +99,7 @@ function mouseInput(event)
             fishing = false;
             inventory = true;
             responding = false;
+            stopOcean();
         }
     }
     if(feeding)
@@ -154,6 +109,7 @@ function mouseInput(event)
             feeding = false;
             fishing = true;
             responding = false;
+            playOcean();
         }
         else if (mouseX >= ratioX*10 && mouseX <= ratioX*360 && mouseY >= 850*ratioY && mouseY <= 1080*ratioY) 
         {
@@ -167,6 +123,7 @@ function mouseInput(event)
             gameOver = false;
             fishing = true;
             responding = false;
+            playOcean();
         }
     }
     if(gameWon)
@@ -178,6 +135,7 @@ function mouseInput(event)
                 gameWon = false;
                 fishing = true;
                 responding = false;
+                playOcean();
             }
             // start new
             if (mouseX >= ratioX*800 && mouseX <= ratioX*1050 && mouseY >= 850*ratioY && mouseY <= 1080*ratioY) 
@@ -185,6 +143,7 @@ function mouseInput(event)
                 gameWon = false;
                 fishing = true;
                 responding = false;
+                playOcean();
             }
         }
     if(inventory)
@@ -193,6 +152,7 @@ function mouseInput(event)
         {
             inventory = false;
             fishing = true;
+            playOcean();
 
         }
 

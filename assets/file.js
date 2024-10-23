@@ -161,6 +161,10 @@ let lineItem =  new GameObject(gameAssets,150 +ITEM_FRAME+ITEM_FRAME,825,ITEM_FR
 //=========================================================
 
 let music = new Audio("assets/audio/the-sea-is-calling-99289.mp3");
+music.loop = true;
+let ocean = new Audio("assets/audio/ocean-waves-250310.mp3");
+ocean.loop = true;
+let catchSfx = new Audio("assets/audio/splash-6213.mp3");
 
 // GameObject holds positional information
 // Can be used to hold other information based on requirements
@@ -618,6 +622,7 @@ function catchFish()
 {
     if (amountReeled >= fishReelTime)
     {
+        playCatchSFX();
         fishCaught = true;
         playerInventory.loot.push(randomFish);
         resetCast();
@@ -625,10 +630,25 @@ function catchFish()
     }
 }
 
-playMusic();
+
 
 function playMusic(){
+    music.volume = 0.5;
     music.play();
+}
+
+function playOcean(){
+    ocean.volume = 0.5;
+    ocean.play();
+}
+
+function playCatchSFX(){
+    catchSfx.volume = 0.5;
+    catchSfx.play();
+}
+
+function stopOcean(){
+    ocean.pause();
 }
 
 // line slowly weakens and reel amount resets
@@ -644,15 +664,7 @@ function passiveLineGain()
 function update() {
     
 
-    if (pause)
-    {
-
-    }
-    else if (option)
-    {
-        
-    }
-    else if (fishing)
+    if (fishing)
     {
         if (casted)
         {
@@ -668,6 +680,7 @@ function update() {
             catchFish();
         }
     }
+    else{ocean.stop()}
 }
 
 function gameloop() {
@@ -743,4 +756,6 @@ document.getElementById("start-btn").addEventListener("mousedown" , turnOn);
 function turnOn(){
     canvas.style.display = "block";
     document.getElementById("start-btn").style.display = "none";
+    playMusic();
+    playOcean();
 };
