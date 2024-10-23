@@ -7,6 +7,8 @@ const CANVAS_WIDTH = 1920;
 const CANVAS_HEIGHT = 1080;
 
 
+let ratioX = canvas.clientWidth / 1920;
+
 //fishing vars
 //======================================
 
@@ -136,7 +138,7 @@ let gameOverMessage = "you ran out of bait";
 
 // image setup
 //=======================================================
-const ITEM_FRAME = 150;
+const ITEM_FRAME = 150 * ratioX;
 
 let background = new Image();
 background.src = "assets/img/Background + UI elements.png";
@@ -159,6 +161,8 @@ let lineItem =  new GameObject(gameAssets,150 +ITEM_FRAME+ITEM_FRAME,825,ITEM_FR
 
 // audio setup
 //=========================================================
+
+let interacted = false;
 
 let music = new Audio("assets/audio/the-sea-is-calling-99289.mp3");
 music.loop = true;
@@ -193,11 +197,17 @@ let inventory = false;
 const ASPECT_RATIO = 1080/1920;
 let optimalWidthtotal = 1920;
 
-setCanvasSize();
 
-window.addEventListener("resize",setCanvasSize);
+window.addEventListener("resize",resetCanvasSize);
 
-function setCanvasSize()
+resetCanvasSize();
+
+function updateUIElements()
+{
+    ratioX = canvas.clientWidth / 1920;
+}
+
+function resetCanvasSize()
 {
     optimalWidthtotal = document.getElementsByClassName("container")[0].clientWidth;
     if (optimalWidthtotal > 1920)
@@ -206,6 +216,7 @@ function setCanvasSize()
         }
     canvas.width = optimalWidthtotal;
     canvas.height = optimalWidthtotal * ASPECT_RATIO; // calclates the best height to view the content
+    updateUIElements();
 }
 
 function draw() {
@@ -223,32 +234,32 @@ function draw() {
             {
                 //fish progress bar
                 context.fillStyle = "#072530";
-                context.fillRect(850,1000,fishReelTime,80);
+                context.fillRect(850*ratioX,1000*ratioX,fishReelTime*ratioX,80*ratioX);
                 context.fillStyle = "#b1d9e8";
-                context.fillRect(850,1000,amountReeled,80);
+                context.fillRect(850*ratioX,1000*ratioX,amountReeled*ratioX,80*ratioX);
 
                 context.fillStyle = "rgb(255,"+ LineSnapAmount +"," + LineSnapAmount +")";
             }
 
-            context.fillRect(hook.x,hook.y,15,15);
+            context.fillRect(hook.x,hook.y,15*ratioX,15*ratioX);
         }
         if(fishCaught)
         {
             context.fillStyle = "#072530";
-            context.fillRect(20,100,900,75);
+            context.fillRect(20*ratioX,100*ratioX,900*ratioX,75*ratioX);
             contextText.fillStyle = "white";
-            contextText.font = "50px Arial";
-            contextText.fillText("You caught ("+randomFish.rarity+ " " + randomFish.name + ")", 50, 150);
+            contextText.font = `${50 * ratioX}px Arial`;
+            contextText.fillText("You caught ("+randomFish.rarity+ " " + randomFish.name + ")", 50*ratioX, 150*ratioX);
         }
         if (lineSnapped)
         {
             contextText.fillStyle = "white";
-            contextText.font = "50px Arial";
-            contextText.fillText(LineSnapMessage, 50, 150);
+            contextText.font = `${50 * ratioX}px Arial`;
+            contextText.fillText(LineSnapMessage, 50*ratioX, 150*ratioX);
         }
         contextText.fillStyle = "white";
-        contextText.font = "50px Arial";
-        contextText.fillText(getBaitQuantity(), baitItem.x + 60, baitItem.y );
+        contextText.font = `${50 * ratioX}px Arial`;
+        contextText.fillText(getBaitQuantity(), baitItem.x + 60*ratioX, baitItem.y*ratioX );
 
         // Item UI
         drawItem(baitItem, playerInventory.bait.find(item => item.status == "active"));
@@ -262,11 +273,11 @@ function draw() {
         if(responding)
         {
             contextText.fillStyle = "white";
-            contextText.font = "50px Arial";
-            contextText.fillText("An Phaist: "+ APhaistResponse, 150, 60);
+            contextText.font = `${50 * ratioX}px Arial`;
+            contextText.fillText("An Phaist: "+ APhaistResponse, 150*ratioX, 60*ratioX);
             contextText.fillStyle = "white";
-            contextText.font = "50px Arial";
-            contextText.fillText(rewardMessage,150,850);
+            contextText.font = `${50 * ratioX}px Arial`;
+            contextText.fillText(rewardMessage,150*ratioX,850*ratioX);
         }
 
     }
@@ -275,47 +286,47 @@ function draw() {
         context.fillStyle = "#000";
         context.fillRect(0, 0, canvas.width, canvas.height);
         contextText.fillStyle = "white";
-        contextText.font = "50px Arial";
-        contextText.fillText("you ran out of bait", 150, 60);
+        contextText.font = `${50 * ratioX}px Arial`;
+        contextText.fillText("you ran out of bait", 150*ratioX, 60*ratioX);
 
         context.fillStyle = "#FF4488";
-        context.fillRect(400, 850, 350,230);
+        context.fillRect(400*ratioX, 850*ratioX, 350*ratioX,230*ratioX);
         contextText.fillStyle = "white";
-        contextText.font = "50px Arial";
-        contextText.fillText("New game", 500, 900);
+        contextText.font = `${50 * ratioX}px Arial`;
+        contextText.fillText("New game", 500*ratioX, 900*ratioX);
     }
     if (inventory)
     {
         context.fillStyle = "#000";
         context.fillRect(0, 0, canvas.width, canvas.height);
         contextText.fillStyle = "white";
-        contextText.font = "50px Arial";
-        contextText.fillText("Inventory", 150, 60);
+        contextText.font = `${50 * ratioX}px Arial`;
+        contextText.fillText("Inventory", 150*ratioX, 60*ratioX);
 
         context.fillStyle = "#FF4488";
-        context.fillRect(400, 850, 350,230);
+        context.fillRect(400*ratioX, 850*ratioX, 350*ratioX,230*ratioX);
         contextText.fillStyle = "white";
-        contextText.font = "50px Arial";
-        contextText.fillText("fish", 500, 900);
+        contextText.font = `${50 * ratioX}px Arial`;
+        contextText.fillText("fish", 500*ratioX, 900*ratioX);
 
         for(let i = 0; i < playerInventory.bait.length;i++)
         {
-            let x = 100 + (i * (ITEM_FRAME + 75));
-            let y = 125;
+            let x = 100 + (i * (ITEM_FRAME + 75))*ratioX;
+            let y = 125*ratioX;
             drawIventoryItems(baitItem, playerInventory.bait.at(i),x,y);
 
         }
         for(let i = 0; i < playerInventory.gear.filter(item => item.type === 'line').length;i++)
         {
-            let x = 100 + (i * (ITEM_FRAME + 75));
-            let y = 390;
+            let x = 100 + (i * (ITEM_FRAME + 75))*ratioX;
+            let y = 390*ratioX;
             drawIventoryItems(rodItem, playerInventory.gear.filter(item => item.type === 'line').at(i),x,y);
 
         }
         for(let i = 0; i < playerInventory.gear.filter(item => item.type === 'rod').length;i++)
             {
-                let x = 100 + (i * (ITEM_FRAME + 75));
-                let y = 655;
+                let x = 100 + (i * (ITEM_FRAME + 75))*ratioX;
+                let y = 655*ratioX;
                 drawIventoryItems(rodItem, playerInventory.gear.filter(item => item.type === 'rod').at(i),x,y);
     
             }
@@ -328,26 +339,26 @@ function draw() {
         context.fillStyle = "#000";
         context.fillRect(0, 0, canvas.width, canvas.height);
         contextText.fillStyle = "white";
-        contextText.font = "50px Arial";
+        contextText.font = `${50 * ratioX}px Arial`;
         contextText.fillText("You gave An Phiast the knowledge he needs to live a normal life", 150, 60);
 
         context.fillStyle = "#FF4488";
-        context.fillRect(400, 850, 350,230);
+        context.fillRect(400* ratioX, 850* ratioX, 350* ratioX,230* ratioX);
         contextText.fillStyle = "white";
-        contextText.font = "50px Arial";
-        contextText.fillText("New game", 500, 900);
+        contextText.font = `${50 * ratioX}px Arial`;
+        contextText.fillText("New game", 500* ratioX, 900* ratioX);
 
         context.fillStyle = "#FF4488";
-        context.fillRect(800, 850, 350, 230);
+        context.fillRect(800* ratioX, 850* ratioX, 350* ratioX, 230* ratioX);
         contextText.fillStyle = "white";
-        contextText.font = "50px Arial";
-        contextText.fillText("Keep playing", 850, 900);
+        contextText.font = `${50 * ratioX}px Arial`;
+        contextText.fillText("Keep playing", 850* ratioX, 900* ratioX);
     }
 }
 
 function drawLine() {
     context.beginPath();       // Start a new path
-    context.moveTo(991,597);    // Move to the starting point
+    context.moveTo(991*ratioX,597*ratioX);    // Move to the starting point
     context.lineTo(hook.x+5, hook.y);    // Draw a line to the ending point
     context.stroke();          // Render the line
 }
@@ -355,50 +366,50 @@ function drawLine() {
 function drawIventoryItems(sprite, data, x, y){
 
     clickableItems.push({
-        x: x - 25,
-        y: y - 25,
-        width: ITEM_FRAME + 50,
-        height: 50,
+        x: x - 25*ratioX,
+        y: y - 25*ratioX,
+        width: ITEM_FRAME + 50*ratioX,
+        height: 50*ratioX,
         item: data
     });
     contextText.fillStyle = "white";
-    contextText.font = "18px Arial";
-    contextText.fillText(data.name,x-15, y-50)
+    contextText.font = `${18 * ratioX}px Arial`;
+    contextText.fillText(data.name,x-15*ratioX, y-50*ratioX)
     // if equiped or not
     if (data.status === "active")
     {   
         context.fillStyle = "#b1d9e8";
-        context.fillRect(x-25, y-25, ITEM_FRAME + 50, 50);
+        context.fillRect(x-25*ratioX, y-25*ratioX, ITEM_FRAME + 50*ratioX, 50*ratioX);
         contextText.fillStyle = "white";
-        contextText.font = "15px Arial";
-        contextText.fillText("un equip", x-15, y-15);
+        contextText.font = `${15 * ratioX}px Arial`;
+        contextText.fillText("un equip", x-15*ratioX, y-15*ratioX);
     }
     else 
     {
         context.fillStyle = "#a1b9e6";
-        context.fillRect(x-25, y-25, ITEM_FRAME + 50, 50);
+        context.fillRect(x-25*ratioX, y-25*ratioX, ITEM_FRAME + 50*ratioX, 50*ratioX);
         contextText.fillStyle = "white";
-        contextText.font = "15px Arial";
-        contextText.fillText("equip", x-15, y-15);
+        contextText.font = `${15 * ratioX}px Arial`;
+        contextText.fillText("equip", x-15*ratioX, y-15*ratioX);
     }
     // text description and rarity
     contextText.fillStyle = "white";
-    contextText.font = "15px Arial";
+    contextText.font = `${15 * ratioX}px Arial`;
     if (data.type != "bait")
         {
-        contextText.fillText(data.description, x-15, y+ITEM_FRAME+15,150);
+        contextText.fillText(data.description, x-15*ratioX, y+ITEM_FRAME+15*ratioX,150*ratioX);
         }
-    else{contextText.fillText("quantity: " +data.quantity, x-15, y+ITEM_FRAME+15,150);}
+    else{contextText.fillText("quantity: " +data.quantity, x-15*ratioX, y+ITEM_FRAME+15*ratioX,150*ratioX);}
     contextText.fillStyle = "white";
-    contextText.font = "15px Arial";
+    contextText.font = `${15 * ratioX}px Arial`;
 
-    contextText.fillText("rarity: " + data.rarity, x-15, y+ITEM_FRAME+35,150);
+    contextText.fillText("rarity: " + data.rarity, x-15*ratioX, y+ITEM_FRAME+35*ratioX,150*ratioX);
 
     context.drawImage(sprite.spritesheet,data.s.x * ITEM_FRAME, data.s.y * ITEM_FRAME,ITEM_FRAME,ITEM_FRAME, 
         x,
         y,
-        ITEM_FRAME,
-        ITEM_FRAME
+        ITEM_FRAME* ratioX,
+        ITEM_FRAME* ratioX
         );
 
 
@@ -408,10 +419,10 @@ function drawIventoryItems(sprite, data, x, y){
 function drawItem(sprite, data){
 
     context.drawImage(sprite.spritesheet,data.s.x * ITEM_FRAME, data.s.y * ITEM_FRAME,ITEM_FRAME,ITEM_FRAME, 
-        sprite.x,
-        sprite.y,
-        ITEM_FRAME,
-        ITEM_FRAME
+        sprite.x* ratioX,
+        sprite.y* ratioX,
+        ITEM_FRAME* ratioX,
+        ITEM_FRAME* ratioX
         );
 
 }
@@ -603,15 +614,15 @@ function animatedLineIn(dir)
     let xincrement =0;
     let yincrement = 0;
 
-    xincrement = (BOAT_POS.x - hook.x) / fishReelTime;
-    yincrement = (BOAT_POS.y - hook.y) / fishReelTime;
+    xincrement = (BOAT_POS.x*ratioX - hook.x) / fishReelTime;
+    yincrement = (BOAT_POS.y*ratioX - hook.y) / fishReelTime;
 
 
-    hook.x += xincrement * dir;
-    hook.y += yincrement * dir;
-    if (hook.x < 600)
+    hook.x += (xincrement * dir)*ratioX;
+    hook.y += (yincrement * dir)*ratioX;
+    if (hook.x < 600*ratioX)
     {
-        hook.x = 600;
+        hook.x = 600*ratioX;
     }
 
 
@@ -695,19 +706,19 @@ let hookDriftAmount =0;
 function hookDrift(){
     hookDriftAmount =Math.floor(Math.random() * 11) - 5;
 
-    hook.x += hookDriftAmount/5;
-    hook.y += hookDriftAmount/10;
+    hook.x += (hookDriftAmount/5)*ratioX;
+    hook.y += (hookDriftAmount/10)*ratioX;
 
 }
 
 function keepHookInCorrectSpot(){
-    if(hook.y < 635)
+    if(hook.y < 635*ratioX)
         {
-            hook.y = 635;
+            hook.y = 635*ratioX;
         }
-    else if (hook.y > 894)
+    else if (hook.y > 894*ratioX)
         {
-            hook.y = 894;
+            hook.y = 894*ratioX;
         }
 }
 
@@ -752,11 +763,8 @@ window.addEventListener('keyup', input);
 
 window.addEventListener("mousedown", input)
 
-document.getElementById("start-btn").addEventListener("mousedown" , turnOn);
-
 function turnOn(){
-    canvas.style.display = "block";
-    document.getElementById("start-btn").style.display = "none";
+
     playMusic();
     playOcean();
-};
+}

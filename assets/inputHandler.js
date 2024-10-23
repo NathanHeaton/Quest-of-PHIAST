@@ -66,12 +66,16 @@ function mouseLetGo()
 }
 function mouseInput(event)
 {
+    if(!interacted)
+    {
+        turnOn();
+        interacted = true;
+    }
     // Get the mouse coordinates relative to the canvas
     var mouseX = event.clientX - canvas.getBoundingClientRect().left;
     var mouseY = event.clientY - canvas.getBoundingClientRect().top;
 
     mouseUp = false;
-
     let ratioY = canvas.clientHeight / 1080;
     let ratioX = canvas.clientWidth / 1920;
 
